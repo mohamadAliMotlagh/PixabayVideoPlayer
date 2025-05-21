@@ -60,4 +60,5 @@ pixabay-android-library = { id = "pixabay.android.Library" }
 pixabay-android-library-compose = { id = "pixabay.android.Library.Compose" }
 pixabay-hilt = { id = "pixabay.hilt" }
 pixabay-android-room = { id = "pixabay.android.room" }
+pixabay-android-lint = { id = "pixabay.android.lint" }
 

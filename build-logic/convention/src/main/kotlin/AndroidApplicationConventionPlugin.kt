@@ -21,6 +21,7 @@ import com.motlagh.convention.configureKotlinAndroid
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getByType
 
@@ -30,6 +31,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("com.android.application")
                 apply("org.jetbrains.kotlin.android")
+                apply(plugin = "pixabay.android.lint")
             }
 
             extensions.configure<ApplicationExtension> {

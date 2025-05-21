@@ -24,3 +24,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "PixabayVideoPlayer"
 include(":app")
+include(":lint")

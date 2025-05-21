@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.lintChecks
+
 plugins {
     alias(libs.plugins.pixabay.android.application.compose)
     alias(libs.plugins.pixabay.android.application)

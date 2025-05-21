@@ -55,5 +55,10 @@ gradlePlugin {
             id = "pixabay.android.room"
             implementationClass = "AndroidRoomConventionPlugin"
         }
+
+        create("androidLint") {
+            id = "pixabay.android.lint"
+            implementationClass = "AndroidLintConventionPlugin"
+        }
     }
 }

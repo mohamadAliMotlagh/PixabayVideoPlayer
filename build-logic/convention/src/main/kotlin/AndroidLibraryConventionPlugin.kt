@@ -19,6 +19,7 @@ import com.motlagh.convention.AppConfig
 import com.motlagh.convention.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.kotlin
@@ -29,6 +30,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("com.android.library")
                 apply("org.jetbrains.kotlin.android")
+                apply(plugin = "pixabay.android.lint")
             }
 
             extensions.configure<LibraryExtension> {
