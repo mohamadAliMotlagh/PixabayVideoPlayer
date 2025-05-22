@@ -1,4 +1,4 @@
-package com.motlagh.pixabayvideoplayer.ui.theme
+package com.motlagh.core.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 

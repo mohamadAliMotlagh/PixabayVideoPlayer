@@ -1,4 +1,4 @@
-package com.motlagh.pixabayvideoplayer.ui.theme
+package com.motlagh.core.designsystem.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

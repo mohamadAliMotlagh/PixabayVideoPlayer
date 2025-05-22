@@ -23,5 +23,9 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "PixabayVideoPlayer"
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":app")
 include(":lint")
+include(":core")
+include(":core:designsystem")
