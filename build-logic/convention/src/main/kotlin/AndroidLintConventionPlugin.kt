@@ -27,7 +27,6 @@ class AndroidLintConventionPlugin : Plugin<Project> {
             dependencies {
                 add("lintChecks",project(":lint"))
                 add("lintChecks","com.slack.lint.compose:compose-lint-checks:1.4.2")
-
             }
         }
     }

@@ -31,3 +31,7 @@ include(":core")
 include(":core:designsystem")
 include(":feature")
 include(":feature:search")
+include(":core:testing")
+
+include(":core:mvi")
+include(":core:util")

@@ -51,6 +51,7 @@ internal fun Project.configureKotlinAndroid(
         }
     }
 
+
     configureKotlin<KotlinAndroidProjectExtension>()
 
     dependencies {

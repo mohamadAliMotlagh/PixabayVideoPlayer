@@ -38,14 +38,15 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 defaultConfig.targetSdk = AppConfig.targetSdk
                 defaultConfig.testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                 testOptions.animationsDisabled = true
-                // The resource prefix is derived from the module name,
-                // so resources inside ":core:module1" must be prefixed with "core_module1_"
-                resourcePrefix = path.split("""\W""".toRegex()).drop(1).distinct().joinToString(separator = "_").lowercase() + "_"
             }
 
             dependencies {
                 add("androidTestImplementation", kotlin("test"))
                 add("testImplementation", kotlin("test"))
+                add("testImplementation", kotlin("kotlinx-coroutines-test"))
+                add("testImplementation", kotlin("turbine"))
+                add("testImplementation", kotlin("test"))
+                add("lintChecks", "com.slack.lint.compose:compose-lint-checks:1.4.2")
             }
         }
     }

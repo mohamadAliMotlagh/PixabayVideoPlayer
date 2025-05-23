@@ -19,5 +19,11 @@ internal fun Project.configureAndroidCompose(
             add("implementation", libs.findLibrary("androidx-ui-tooling-preview").get())
             add("debugImplementation", libs.findLibrary("androidx-ui-tooling").get())
         }
+
+        testOptions {
+            unitTests.all {
+                it.useJUnitPlatform()
+            }
+        }
     }
 }

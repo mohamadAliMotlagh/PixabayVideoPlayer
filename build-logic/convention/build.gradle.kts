@@ -60,5 +60,10 @@ gradlePlugin {
             id = "pixabay.android.lint"
             implementationClass = "AndroidLintConventionPlugin"
         }
+
+        create("androidFeature") {
+            id = "pixabay.android.feature"
+            implementationClass = "AndroidFeatureConventionPlugin"
+        }
     }
 }
