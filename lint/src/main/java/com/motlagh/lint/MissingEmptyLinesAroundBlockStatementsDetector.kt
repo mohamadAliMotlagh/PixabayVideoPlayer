@@ -38,7 +38,7 @@ val ISSUE_MISSING_EMPTY_LINES_AROUND_BLOCK_STATEMENTS = Issue.create(
     category = Category.CORRECTNESS,
     priority = 5,
     androidSpecific = true,
-    severity = Severity.WARNING,
+    severity = Severity.ERROR,
     implementation = Implementation(
         MissingEmptyLinesAroundBlockStatementsDetector::class.java,
         Scope.JAVA_FILE_SCOPE

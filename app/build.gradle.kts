@@ -45,4 +45,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(projects.core.designsystem)
+    implementation(projects.core.network)
+    implementation(projects.core.database)
+    implementation(projects.feature.search)
+    implementation(libs.coil.kt)
+    implementation(libs.kotlinx.serialization.json)
 }

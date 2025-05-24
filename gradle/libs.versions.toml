@@ -20,7 +20,11 @@ androidxLifecycle = "2.9.0"
 androidxNavigation = "2.9.0"
 kotlinxSerializationJson = "1.8.0"
 turbine = "1.2.0"
-kotlinxCoroutines = "1.9.0"
+kotlinxCoroutines = "1.10.1"
+coil = "2.7.0"
+retrofit = "2.11.0"
+okhttp = "4.12.0"
+retrofitKotlinxSerializationJson = "1.0.0"
 
 
 
@@ -70,12 +74,16 @@ kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-guava = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-guava", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
-
+coil-kt = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
+coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+coil-kt-svg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coil" }
 
 androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
-
+retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-kotlin-serialization = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofit" }
+okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -92,7 +100,7 @@ pixabay-android-application-compose = { id = "pixabay.android.application.compos
 pixabay-android-application = { id = "pixabay.android.application" }
 pixabay-android-library = { id = "pixabay.android.Library" }
 pixabay-android-library-compose = { id = "pixabay.android.Library.Compose" }
-pixabay-android-feature = {id = "pixabay.android.feature"}
+pixabay-android-feature = { id = "pixabay.android.feature" }
 pixabay-hilt = { id = "pixabay.hilt" }
 pixabay-android-room = { id = "pixabay.android.room" }
 pixabay-android-lint = { id = "pixabay.android.lint" }

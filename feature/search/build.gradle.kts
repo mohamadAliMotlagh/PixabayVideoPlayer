@@ -11,8 +11,10 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(projects.core.testing)
-    implementation(projects.core.mvi)
+    implementation(projects.core.util)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(projects.core.database)
+    api(projects.core.network)
 }

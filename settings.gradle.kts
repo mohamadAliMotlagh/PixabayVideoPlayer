@@ -35,3 +35,5 @@ include(":core:testing")
 
 include(":core:mvi")
 include(":core:util")
+include(":core:database")
+include(":core:network")
