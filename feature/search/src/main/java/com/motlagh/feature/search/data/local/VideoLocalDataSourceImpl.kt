@@ -21,7 +21,7 @@ class VideoLocalDataSourceImpl @Inject constructor(private val dao: VideoSearchD
         dao.insertSearchVideoCrossRefs(crossRefs)
     }
 
-    override fun getVideosForSearch(searchQuery: String): Flow<List<VideoEntity>> {
+    override fun searchInDatabase(searchQuery: String): Flow<List<VideoEntity>> {
         return dao.getSearchWithVideosFlow(searchQuery)
             .map { it?.videos ?: emptyList() }
     }

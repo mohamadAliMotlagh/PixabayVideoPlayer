@@ -1,6 +1,5 @@
 package com.motlagh.feature.search.di
 
-import com.motlagh.core.utils.result.asResult
 import com.motlagh.feature.search.data.SearchVideoRepositoryImpl
 import com.motlagh.feature.search.data.local.VideoLocalDataSource
 import com.motlagh.feature.search.data.local.VideoLocalDataSourceImpl
@@ -34,7 +33,6 @@ abstract class SearchModule {
         remoteDataSource: SearchVideoRemoteDataSourceImpl,
     ): SearchVideoRemoteDataSource
 
-    @Singleton
     @Binds
     internal abstract fun repository(
         repository: SearchVideoRepositoryImpl,

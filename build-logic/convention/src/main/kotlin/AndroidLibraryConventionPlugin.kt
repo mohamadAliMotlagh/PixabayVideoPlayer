@@ -17,6 +17,7 @@
 import com.android.build.gradle.LibraryExtension
 import com.motlagh.convention.AppConfig
 import com.motlagh.convention.configureKotlinAndroid
+import com.motlagh.convention.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
@@ -43,9 +44,6 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
 
             dependencies {
                 add("androidTestImplementation", kotlin("test"))
-                add("testImplementation", kotlin("test"))
-                add("testImplementation", kotlin("kotlinx-coroutines-test"))
-                add("testImplementation", kotlin("turbine"))
                 add("testImplementation", kotlin("test"))
                 add("lintChecks", "com.slack.lint.compose:compose-lint-checks:1.4.2")
             }

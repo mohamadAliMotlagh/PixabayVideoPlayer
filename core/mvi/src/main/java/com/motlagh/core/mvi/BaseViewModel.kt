@@ -1,12 +1,16 @@
 package com.motlagh.core.mvi
 
 import android.os.Parcelable
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.launch
@@ -14,7 +18,7 @@ import kotlinx.coroutines.launch
 private const val SAVED_UI_STATE_KEY = "savedUiStateKey"
 
 abstract class BaseViewModel<UI_STATE : Parcelable, PARTIAL_UI_STATE, EVENT, INTENT>(
-    savedStateHandle: SavedStateHandle,
+    private val savedStateHandle: SavedStateHandle,
     private val initialState: UI_STATE,
     val savableViewModel: Boolean = false
 ) : ViewModel(),
@@ -31,10 +35,15 @@ abstract class BaseViewModel<UI_STATE : Parcelable, PARTIAL_UI_STATE, EVENT, INT
 
     init {
         viewModelScope.launch {
+            viewModelScope.launch {
+                Log.e("BaseViewModel",uiState.first().toString())
+            }
+
             merge(
                 getIntents(::mapIntents),
                 getInternalChanges(),
             )
+
                 .scan(uiState.value, ::reduceUiState)
                 .collect {
                     if (savableViewModel) {
@@ -42,7 +51,6 @@ abstract class BaseViewModel<UI_STATE : Parcelable, PARTIAL_UI_STATE, EVENT, INT
                     } else {
                         _nonSavableState.value = it
                     }
-                    _nonSavableState.value = it
                 }
         }
     }

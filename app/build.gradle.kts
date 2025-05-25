@@ -18,6 +18,12 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    testOptions {
+        unitTests.all {
+            it.useJUnitPlatform()
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -50,4 +56,5 @@ dependencies {
     implementation(projects.feature.search)
     implementation(libs.coil.kt)
     implementation(libs.kotlinx.serialization.json)
+    testImplementation(kotlin("test"))
 }
