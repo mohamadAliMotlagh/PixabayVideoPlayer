@@ -36,7 +36,7 @@ abstract class BaseViewModel<UI_STATE : Parcelable, PARTIAL_UI_STATE, EVENT, INT
     init {
         viewModelScope.launch {
             viewModelScope.launch {
-                Log.e("BaseViewModel",uiState.first().toString())
+                Log.e("BaseViewModel", uiState.first().toString())
             }
 
             merge(

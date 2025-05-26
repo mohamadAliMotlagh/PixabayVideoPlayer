@@ -1,11 +1,11 @@
 package com.motlagh.feature.search.data.mapper
 
+import com.motlagh.domain.video.VideoItemDomainModel
 import com.motlagh.feature.search.data.remote.dto.SearchDTO
-import com.motlagh.feature.search.domain.model.VideoItem
 
 
 internal fun SearchDTO.toVideoItems() = hits?.map {
-    VideoItem(
+    VideoItemDomainModel(
         videoUrl = it?.videos?.medium?.url ?: "",
         id = it?.id.toString(),
         tags = it?.tags?.split(",") ?: listOf(),

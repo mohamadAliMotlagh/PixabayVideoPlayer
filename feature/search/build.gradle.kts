@@ -18,5 +18,6 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(projects.core.database)
+    implementation(projects.core.domain.video)
     api(projects.core.network)
 }

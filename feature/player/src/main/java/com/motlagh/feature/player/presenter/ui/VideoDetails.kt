@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.motlagh.core.designsystem.AppIcons
 import com.motlagh.feature.player.presenter.PlayerUiState
 
 @Composable
@@ -47,17 +48,17 @@ fun VideoDetails(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             VideoStatItem(
-                icon = "👁️",
+                icon = AppIcons.Visibility,
                 value = formatNumber(uiState.views),
                 label = "views"
             )
             VideoStatItem(
-                icon = "👍",
+                icon = AppIcons.ThumbUp,
                 value = formatNumber(uiState.likes),
                 label = "likes"
             )
             VideoStatItem(
-                icon = "💬",
+                icon = AppIcons.Comment,
                 value = formatNumber(uiState.comments),
                 label = "comments"
             )
@@ -67,7 +68,7 @@ fun VideoDetails(
 
 @Composable
 private fun VideoStatItem(
-    icon: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
     value: String,
     label: String,
     modifier: Modifier = Modifier
@@ -76,10 +77,20 @@ private fun VideoStatItem(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "$icon $value",
-            style = MaterialTheme.typography.bodyLarge
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurface
+            )
+            Text(
+                text = value,
+                style = MaterialTheme.typography.bodyLarge
+            )
+        }
         Text(
             text = label,
             style = MaterialTheme.typography.bodySmall,

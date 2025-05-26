@@ -1,7 +1,6 @@
-package com.motlagh.feature.search.domain.model
+package com.motlagh.domain.video
 
-
-data class VideoItem(
+data class VideoItemDomainModel(
     val id: String,
     val thumbnailUrl: String,
     val videoUrl: String,

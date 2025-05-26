@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.motlagh.core.testing.MainCoroutineExtension
 import com.motlagh.feature.search.domain.SearchUseCase
-import com.motlagh.feature.search.domain.model.VideoItem
+import com.motlagh.feature.search.domain.model.VideoItemDomainModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -65,7 +65,7 @@ class SearchViewModelTest {
             // Given
             val query = "nature"
             val fakeVideos = listOf(
-                VideoItem(
+                VideoItemDomainModel(
                     id = "1",
                     thumbnailUrl = "url1",
                     videoUrl = "video1",

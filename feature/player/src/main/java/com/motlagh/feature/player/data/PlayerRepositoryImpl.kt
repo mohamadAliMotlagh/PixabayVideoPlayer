@@ -1,9 +1,10 @@
-package com.motlagh.feature.player.data.repository
+package com.motlagh.feature.player.data
 
 import android.content.Context
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
+import com.motlagh.feature.player.domain.PlayerRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -28,7 +29,7 @@ class PlayerRepositoryImpl @Inject constructor(
                     exoPlayer.setMediaItem(mediaItem)
                     exoPlayer.prepare()
                 }
-                
+
                 exoPlayer.addListener(object : Player.Listener {
                     override fun onPlaybackStateChanged(playbackState: Int) {
                         if (playbackState == Player.STATE_READY) {
@@ -95,4 +96,4 @@ class PlayerRepositoryImpl @Inject constructor(
         savedPosition = 0L
         shouldPlay = false
     }
-} 
+}

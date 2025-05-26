@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface VideoSearchDao {
-
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertVideos(videos: List<VideoEntity>)
 
@@ -29,4 +28,19 @@ interface VideoSearchDao {
 
     @Query("SELECT * FROM SearchQueryEntity WHERE `query` = :searchQuery")
     suspend fun getSearchQueryByText(searchQuery: String): SearchQueryEntity?
+
+    @Query("UPDATE VideoEntity SET isBookmarked = 1 WHERE id = :videoId")
+    suspend fun bookmarkVideo(videoId: String)
+
+    @Query("UPDATE VideoEntity SET isBookmarked = 0 WHERE id = :videoId")
+    suspend fun removeBookmarkVideo(videoId: String)
+
+    @Query("SELECT * FROM VideoEntity WHERE isBookmarked = 1")
+    fun getAllBookmarkedVideos(): Flow<List<VideoEntity>>
+
+    @Query("SELECT * FROM VideoEntity WHERE id = :videoId")
+    suspend fun getVideoById(videoId: String): VideoEntity?
+
+
+
 }

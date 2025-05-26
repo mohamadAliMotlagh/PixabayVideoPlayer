@@ -2,26 +2,33 @@ package com.motlagh.feature.player.presenter.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.motlagh.feature.player.presenter.ui.PlayerScreen
+import kotlinx.serialization.Serializable
 
-const val PLAYER_ROUTE = "player/{videoUrl}"
+@Serializable
+data class VideoPlayerRoute(val videoID: String)
+
+fun NavHostController.navigateToPlayer(videoID: String) {
+    navigate(VideoPlayerRoute(videoID))
+}
 
 fun NavGraphBuilder.playerScreen(
     onBackPressed: () -> Unit
 ) {
     composable(
-        route = PLAYER_ROUTE,
+        route = VideoPlayerRoute::class,
     ) { backStackEntry ->
-        val videoUrl = backStackEntry.arguments?.getString("videoUrl") ?: ""
         PlayerScreen(
             onBackPressed = onBackPressed
         )
     }
 }
 
-fun NavHostController.navigateToPlayer(videoUrl: String) {
-    navigate("player/$videoUrl")
-} 
+
+
+

@@ -3,13 +3,13 @@ package com.motlagh.feature.search.data
 import android.util.Log
 import com.motlagh.core.utils.coroutine.IoDispatcher
 import com.motlagh.core.utils.coroutine.IoScope
+import com.motlagh.domain.video.VideoItemDomainModel
 import com.motlagh.feature.search.data.local.VideoLocalDataSource
 import com.motlagh.feature.search.data.mapper.toVideoEntity
 import com.motlagh.feature.search.data.mapper.toVideoItem
 import com.motlagh.feature.search.data.mapper.toVideoItems
 import com.motlagh.feature.search.data.remote.SearchVideoRemoteDataSource
 import com.motlagh.feature.search.domain.SearchVideoRepository
-import com.motlagh.feature.search.domain.model.VideoItem
 import jakarta.inject.Inject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
@@ -20,10 +20,8 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 
@@ -42,7 +40,7 @@ class SearchVideoRepositoryImpl @Inject constructor(
 
     }
 
-    override suspend fun searchVideos(query: String): Flow<Result<List<VideoItem>>> = channelFlow {
+    override suspend fun searchVideos(query: String): Flow<Result<List<VideoItemDomainModel>>> = channelFlow {
         //_query.value = query
 
         ensureActive()

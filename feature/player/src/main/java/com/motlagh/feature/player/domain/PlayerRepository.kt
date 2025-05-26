@@ -1,4 +1,4 @@
-package com.motlagh.feature.player.data.repository
+package com.motlagh.feature.player.domain
 
 import androidx.media3.exoplayer.ExoPlayer
 
@@ -8,4 +8,4 @@ interface PlayerRepository {
     fun setOnPositionChangedListener(listener: (Long) -> Unit)
     fun setPlaybackState(position: Long, shouldPlay: Boolean)
     fun release()
-} 
+}

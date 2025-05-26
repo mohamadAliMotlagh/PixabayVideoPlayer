@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 
 @Parcelize
- data class Video(
+ internal data class Video(
     val id: String,
     val userid: String,
     val thumbnailUrl: String,
@@ -15,7 +15,7 @@ import kotlinx.parcelize.Parcelize
 ) : Parcelable
 
 @Parcelize
-data class SearchUiState(
+internal data class SearchUiState(
     val query: String,
     val videos: List<Video>,
 ) : Parcelable {

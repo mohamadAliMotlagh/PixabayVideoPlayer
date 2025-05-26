@@ -1,5 +1,6 @@
 package com.motlagh.feature.search.presenter.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -28,34 +29,33 @@ import com.motlagh.feature.search.presenter.SearchViewModel
 
 
 @Composable
-fun NavigateToSearch() {
-    SearchVideoPresenter()
-}
-
-@Composable
-internal fun SearchVideoPresenter(
-    searchViewModel: SearchViewModel = hiltViewModel()
+internal fun SearchVideoRoute(
+    searchViewModel: SearchViewModel = hiltViewModel(),
+    onItemClicks: (videoID: String) -> Unit
 ) {
-
-
     val uiState = searchViewModel.uiState.collectAsStateWithLifecycle()
-
-
-
-    SearchVideoScreen(uiState.value, searchViewModel::acceptIntent)
-
-
+    SearchVideoScreen(uiState.value) {
+        when (it) {
+            is SearchIntent.OnItemClicks -> onItemClicks(it.videoID)
+            else -> {
+                searchViewModel.acceptIntent(it)
+            }
+        }
+    }
 }
 
 @Composable
-private fun SearchVideoScreen(uiState: SearchUiState, onIntent: (SearchIntent) -> Unit) {
+private fun SearchVideoScreen(
+    uiState: SearchUiState,
+    onIntent: (SearchIntent) -> Unit
+) {
     Column(modifier = Modifier.fillMaxSize()) {
         TextField(value = uiState.query, onValueChange = {
             onIntent(SearchIntent.OnQueryChanged(it))
         })
 
         LazyVerticalGrid(modifier = Modifier.fillMaxSize(), columns = GridCells.Adaptive(100.dp)) {
-            items(uiState.videos, key = {it.id}) {
+            items(uiState.videos, key = { it.id }) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
                         .data(it.thumbnailUrl)
@@ -63,7 +63,10 @@ private fun SearchVideoScreen(uiState: SearchUiState, onIntent: (SearchIntent) -
                         .build(),
                     modifier = Modifier
                         .fillMaxWidth(0.9f)
-                        .fillMaxHeight(0.9f * 0.6f),
+                        .fillMaxHeight(0.9f * 0.6f)
+                        .clickable {
+                            onIntent(SearchIntent.OnItemClicks(it.id))
+                        },
                     contentDescription = null,
                 )
             }

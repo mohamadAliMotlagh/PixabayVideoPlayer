@@ -1,11 +1,10 @@
 package com.motlagh.feature.search.presenter.mapper
 
-import com.motlagh.feature.search.domain.model.VideoItem
-import com.motlagh.feature.search.presenter.SearchUiState
+import com.motlagh.domain.video.VideoItemDomainModel
 import com.motlagh.feature.search.presenter.Video
 
 
-internal fun VideoItem.toUIModel() = Video(
+internal fun VideoItemDomainModel.toUIModel() = Video(
     videoUrl = videoUrl,
     id = id,
     userid = username,

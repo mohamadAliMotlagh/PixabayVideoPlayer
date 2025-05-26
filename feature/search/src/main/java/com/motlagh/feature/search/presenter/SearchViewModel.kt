@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.motlagh.core.mvi.BaseViewModel
 import com.motlagh.feature.search.domain.SearchUseCase
+import com.motlagh.feature.search.presenter.SearchUiState.Partial.*
 import com.motlagh.feature.search.presenter.mapper.toUIModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -18,10 +19,11 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import org.jetbrains.annotations.VisibleForTesting
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchViewModel @Inject constructor(
+internal class SearchViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val searchUseCase: SearchUseCase
 ) : BaseViewModel<SearchUiState, SearchUiState.Partial, Nothing, SearchIntent>(
@@ -66,8 +68,10 @@ class SearchViewModel @Inject constructor(
         when (intent) {
             is SearchIntent.OnQueryChanged -> {
                 queryFlow.update { intent.query }
-                emit(SearchUiState.Partial.NewQueryReceived(intent.query))
+                emit(NewQueryReceived(intent.query))
             }
+
+            is SearchIntent.OnItemClicks -> {}
         }
     }
 

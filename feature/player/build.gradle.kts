@@ -17,6 +17,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(projects.core.database)
     api(projects.core.network)
+    implementation(projects.core.domain.video)
 
     implementation("androidx.media3:media3-exoplayer:1.7.1")
     implementation("androidx.media3:media3-ui:1.7.1")

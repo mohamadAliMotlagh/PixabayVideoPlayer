@@ -4,11 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
-import android.os.Build
-import android.view.View
 import android.view.ViewGroup
-import android.view.WindowInsets
-import android.view.WindowInsetsController
 import android.widget.FrameLayout
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
@@ -20,12 +16,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -33,13 +27,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.motlagh.feature.player.R
 import com.motlagh.feature.player.presenter.PlayerIntent
 import com.motlagh.feature.player.presenter.PlayerViewModel
 
 @SuppressLint("ComposeModifierMissing")
 @Composable
-fun PlayerScreen(
+internal fun PlayerScreen(
     viewModel: PlayerViewModel = hiltViewModel(),
     onBackPressed: () -> Unit
 ) {
@@ -124,9 +117,6 @@ fun PlayerScreen(
                         )
                         val player = viewModel.getPlayer()
                         setPlayer(player)
-                        setOnPositionChangedListener { position ->
-                            viewModel.acceptIntent(PlayerIntent.UpdatePosition(position))
-                        }
                         setOnFullscreenChangedListener { isFullscreen ->
                             viewModel.acceptIntent(PlayerIntent.ToggleFullscreen)
                         }
