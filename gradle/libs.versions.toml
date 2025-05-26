@@ -29,7 +29,7 @@ androidxTestRules = "1.6.1"
 androidxTestRunner = "1.6.2"
 retrofitKotlinxSerializationJson = "1.0.0"
 mockk = "1.14.2"
-junitJupiter = "5.10.2"
+junitJupiter = "5.11.4"
 
 
 

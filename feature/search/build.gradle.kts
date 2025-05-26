@@ -8,8 +8,9 @@ plugins {
 android {
     namespace = "com.motlagh.feature.search"
     testOptions {
-        unitTests.all {
-            it.useJUnitPlatform()
+        unitTests {
+            isIncludeAndroidResources = true
+            isReturnDefaultValues = true
         }
     }
     compileSdk = 35
