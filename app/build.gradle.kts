@@ -54,6 +54,7 @@ dependencies {
     implementation(projects.core.network)
     implementation(projects.core.database)
     implementation(projects.feature.search)
+    implementation(projects.feature.player)
     implementation(libs.coil.kt)
     implementation(libs.kotlinx.serialization.json)
     testImplementation(kotlin("test"))

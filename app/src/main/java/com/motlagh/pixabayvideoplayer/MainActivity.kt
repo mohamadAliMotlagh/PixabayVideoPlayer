@@ -11,6 +11,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.view.TintableBackgroundView
 import com.motlagh.core.designsystem.theme.PixabayVideoPlayerTheme
+import com.motlagh.feature.player.presenter.ui.PlayerScreen
 import com.motlagh.feature.search.presenter.ui.NavigateToSearch
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,7 +24,10 @@ class MainActivity : ComponentActivity() {
             PixabayVideoPlayerTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Surface(modifier = Modifier.padding(innerPadding)) {
-                        NavigateToSearch()
+                        //NavigateToSearch()
+                        PlayerScreen(){
+
+                        }
                     }
                 }
             }
