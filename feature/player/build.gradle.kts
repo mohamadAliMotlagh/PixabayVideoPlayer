@@ -1,12 +1,10 @@
-import org.gradle.internal.impldep.org.junit.platform.launcher.EngineFilter.includeEngines
-
 plugins {
     alias(libs.plugins.pixabay.android.feature)
     alias(libs.plugins.pixabay.android.library.compose)
 }
 
 android {
-    namespace = "com.motlagh.feature.search"
+    namespace = "com.motlagh.feature.player"
 }
 dependencies {
     implementation(libs.androidx.core.ktx)

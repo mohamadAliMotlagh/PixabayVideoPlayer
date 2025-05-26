@@ -49,6 +49,16 @@ internal fun Project.configureKotlinAndroid(
             targetCompatibility = JavaVersion.VERSION_11
             isCoreLibraryDesugaringEnabled = true
         }
+
+        testOptions {
+            unitTests.all {
+                it.useJUnitPlatform()
+            }
+            unitTests{
+                isIncludeAndroidResources = true
+                isReturnDefaultValues = true
+            }
+        }
     }
 
 
