@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.motlagh.feature.player"
+    namespace = "com.motlagh.feature.bookmark"
 }
 dependencies {
     implementation(libs.androidx.core.ktx)
@@ -12,15 +12,12 @@ dependencies {
     implementation(libs.material)
     implementation(projects.core.testing)
     implementation(projects.core.util)
+    implementation(projects.core.domain.bookmarking)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(projects.core.database)
     api(projects.core.network)
     implementation(projects.core.domain.video)
-    implementation(projects.core.domain.bookmarking)
 
-    implementation("androidx.media3:media3-exoplayer:1.7.1")
-    implementation("androidx.media3:media3-ui:1.7.1")
-    implementation("androidx.media3:media3-common:1.7.1")
 }
