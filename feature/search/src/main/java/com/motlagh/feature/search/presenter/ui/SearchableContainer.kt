@@ -59,8 +59,6 @@ import com.motlagh.feature.search.R
 
 @Composable
 internal fun SearchableContainer(
-    isSearchBarExpanded: () -> Boolean,
-    onSearchBarExpanded: (Boolean) -> Unit,
     searchQuery: () -> String,
     onBookmarkClicked: () -> Unit,
     onQueryChange: (String) -> Unit,
@@ -70,6 +68,7 @@ internal fun SearchableContainer(
     val searchFieldFocusRequester = remember { FocusRequester() }
     val searchFieldInteractionSource = remember { MutableInteractionSource() }
     val searchFieldFocusManager = LocalFocusManager.current
+    var isSearchBarExpanded = remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -79,12 +78,12 @@ internal fun SearchableContainer(
                 interactionSource = searchFieldInteractionSource,
                 onClick = {
                     searchFieldFocusManager.clearFocus(true)
-                    onSearchBarExpanded(false)
+                    isSearchBarExpanded.value = false
                 }
             ),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        AnimatedVisibility(visible = !isSearchBarExpanded()) {
+        AnimatedVisibility(visible = !isSearchBarExpanded.value) {
             Column(Modifier.fillMaxWidth()) {
                 Spacer(modifier = Modifier.height(32.dp))
 
@@ -115,17 +114,12 @@ internal fun SearchableContainer(
             }
         }
 
-        val remeber = remember {
-            { newValue: String ->
-                onQueryChange(newValue)
-            }
-        }
 
         SearchBar(
             value = searchQuery,
-            onQueryChange = remeber,
-            isExpanded = { isSearchBarExpanded() },
-            onExpandedChange = onSearchBarExpanded,
+            onQueryChange = onQueryChange,
+            isExpanded = { isSearchBarExpanded.value },
+            onExpandedChange = { isSearchBarExpanded.value = it },
             focusRequester = searchFieldFocusRequester,
             interactionSource = searchFieldInteractionSource,
             focusManager = searchFieldFocusManager,
@@ -158,23 +152,10 @@ private fun SearchBar(
         }
     }
 
-
     val paddingAnimate by animateDpAsState(
         targetValue = if (isExpanded()) 0.dp else 16.dp,
         label = "paddingAnimation"
     )
-
-//    val animatable by remember { mutableStateOf(Animatable(0f)) } // Start at scale 1.0
-//
-//    // Launch animation when isExpanded changes
-//    LaunchedEffect(isExpanded()) {
-//        val targetScale = if (isExpanded()) 0f else 16f
-//        animatable.animateTo(
-//            targetValue = targetScale,
-//            animationSpec = tween(durationMillis = 100, easing = LinearEasing)
-//        )
-//    }
-
 
     TextField(
         value = value(),

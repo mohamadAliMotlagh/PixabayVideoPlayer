@@ -17,12 +17,12 @@ import com.motlagh.core.ui.videoItem.VideoItemUiModel
 
 @Composable
 fun VideoList(
-    videos: () -> List<VideoItemUiModel>,
+    videos: List<VideoItemUiModel>,
     onVideoClick: (String) -> Unit,
     onBookmarkClick: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val list by rememberUpdatedState(videos())
+    val list by rememberUpdatedState(videos)
 
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 250.dp),
@@ -50,7 +50,7 @@ fun VideoList(
 internal fun VideoListPreview() {
     PixabayVideoPlayerTheme {
         VideoList(
-            videos = {List(6) { index ->
+            videos = List(6) { index ->
                 VideoItemUiModel(
                     id = index.toString(),
                     thumbnailUrl = "https://picsum.photos/400/225?random=$index",
@@ -58,7 +58,7 @@ internal fun VideoListPreview() {
                     tags = listOf("tag1", "tag2", "tag3", "tag4", "tag5"),
                     isBookmarked = index % 2 == 0
                 )
-            }},
+            },
             onVideoClick = { },
             onBookmarkClick = { _, _ -> }
         )

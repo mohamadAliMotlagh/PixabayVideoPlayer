@@ -41,7 +41,7 @@ fun BookMarkList(
 ) {
     VideoList(
         modifier = Modifier.fillMaxSize(),
-        videos = { uiState.list },
+        videos =  uiState.list ,
         onVideoClick = {
             onIntent(BookmarkIntent.OnItemClick(it))
         }, onBookmarkClick = { id, hasBookmark ->

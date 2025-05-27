@@ -30,6 +30,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.motlagh.core.ui.videoItem.VideoItemUiModel
 import com.motlagh.core.ui.videolist.VideoList
 import com.motlagh.feature.search.presenter.SearchIntent
 import com.motlagh.feature.search.presenter.SearchUiState
@@ -63,41 +64,22 @@ private fun SearchVideoScreen(
     onIntent: (SearchIntent) -> Unit
 ) {
 
-
-    Column(Modifier.fillMaxSize()) {
-
-        val isSearchBarExpanded = rememberSaveable { mutableStateOf(false) }
-        val remember = remember {
-            { it: Boolean ->
-                isSearchBarExpanded.value = it
-            }
+    SearchableContainer(
+        searchQuery = { uiState().query },
+        onQueryChange = {
+                onIntent(SearchIntent.OnQueryChanged(it)) },
+        onBookmarkClicked = {
+            onIntent(SearchIntent.OnBookmarkButtonClicked)
+        },
+        content = {
+            VideoList(
+                modifier = Modifier.fillMaxSize(),
+                videos = uiState().videos,
+                onVideoClick = { onIntent(SearchIntent.OnItemClicks(it)) },
+                onBookmarkClick = { id, hasBookmark ->
+                    onIntent(SearchIntent.BookMarkClicked(id, hasBookmark))
+                }
+            )
         }
-
-        SearchableContainer(
-            isSearchBarExpanded = { isSearchBarExpanded.value },
-            searchQuery = { uiState.invoke().query },
-
-            onQueryChange = {
-                onIntent(SearchIntent.OnQueryChanged(it))
-            },
-            onBookmarkClicked = {
-                onIntent(SearchIntent.OnBookmarkButtonClicked)
-            },
-            onSearchBarExpanded = remember,
-            content = {
-                VideoList(
-                    modifier = Modifier.fillMaxSize(),
-                    videos = { uiState().videos },
-                    onVideoClick = { onIntent(SearchIntent.OnItemClicks(it)) },
-                    onBookmarkClick = { id, hasBookmark ->
-                        onIntent(SearchIntent.BookMarkClicked(id, hasBookmark))
-                    }
-                )
-            }
-        )
-
-
-    }
-
-
+    )
 }

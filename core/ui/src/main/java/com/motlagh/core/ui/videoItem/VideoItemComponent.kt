@@ -50,7 +50,6 @@ fun VideoItemComponent(
                 .fillMaxWidth()
                 .aspectRatio(16f / 9f)
         ) {
-
             val context = LocalContext.current
             val rememberImage = remember {
                 ImageRequest.Builder(context)
@@ -67,13 +66,11 @@ fun VideoItemComponent(
             )
         }
 
-        // Content
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            // Username and Bookmark in a row
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -87,13 +84,10 @@ fun VideoItemComponent(
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
-
-                key(data().id, data().isBookmarked) {
-                    BookmarkIcon(
-                        isBookmarked = data().isBookmarked,
-                        onClick = { onBookmarkClick(data().id, data().isBookmarked) }
-                    )
-                }
+                BookmarkIcon(
+                    isBookmarked = data().isBookmarked,
+                    onClick = { onBookmarkClick(data().id, data().isBookmarked) }
+                )
             }
 
             Spacer(modifier = Modifier.height(8.dp))
