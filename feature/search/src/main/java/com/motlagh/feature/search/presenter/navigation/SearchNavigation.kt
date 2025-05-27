@@ -15,13 +15,16 @@ object SearchRoute
 fun NavController.navigateToSearch(navOptions: NavOptions) =
     navigate(route = SearchRoute, navOptions)
 
-fun NavGraphBuilder.searchScreen(onVideoItemClicked: (String) -> Unit) {
+fun NavGraphBuilder.searchScreen(
+    onVideoItemClicked: (String) -> Unit,
+    onBookmarkClicked: () -> Unit
+) {
     composable<SearchRoute> {
-       val onItemClicks = remember {
+        val onItemClicks = remember {
             { id: String ->
                 onVideoItemClicked(id)
             }
         }
-        SearchVideoRoute(onItemClicks = onItemClicks)
+        SearchVideoRoute(onItemClicks = onItemClicks, onBookmarkClicked = onBookmarkClicked)
     }
 }

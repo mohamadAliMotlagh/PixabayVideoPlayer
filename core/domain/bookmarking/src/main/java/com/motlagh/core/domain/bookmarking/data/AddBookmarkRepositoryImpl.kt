@@ -4,10 +4,10 @@ import com.motlagh.core.domain.bookmarking.data.local.BookmarkLocalDataSource
 import com.motlagh.core.domain.bookmarking.domain.repository.AddBookmarkRepository
 import jakarta.inject.Inject
 
-class AddBookmarkRepositoryImpl @Inject constructor(
+internal class AddBookmarkRepositoryImpl @Inject constructor(
     private val bookmarkLocalDataSource: BookmarkLocalDataSource
 ) : AddBookmarkRepository {
-    override suspend fun invoke(videoId: String) {
+    override suspend fun addBookmark(videoId: String) {
         bookmarkLocalDataSource.add(videoId)
     }
 }

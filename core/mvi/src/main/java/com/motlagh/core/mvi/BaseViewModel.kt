@@ -19,8 +19,11 @@ private const val SAVED_UI_STATE_KEY = "savedUiStateKey"
 
 abstract class BaseViewModel<UI_STATE : Parcelable, PARTIAL_UI_STATE, EVENT, INTENT>(
     private val savedStateHandle: SavedStateHandle,
-    private val initialState: UI_STATE,
-    val savableViewModel: Boolean = false
+    initialState: UI_STATE,
+
+    // its for enable or disable saving LAST state of ui state. it will useful when kill process happen.
+    val savableViewModel: Boolean = true
+
 ) : ViewModel(),
     IntentDelegate<INTENT, PARTIAL_UI_STATE> by IntentDelegateImpl(),
     InternalChangesDelegate<PARTIAL_UI_STATE> by InternalChangesDelegateImpl(),
@@ -35,10 +38,6 @@ abstract class BaseViewModel<UI_STATE : Parcelable, PARTIAL_UI_STATE, EVENT, INT
 
     init {
         viewModelScope.launch {
-            viewModelScope.launch {
-                Log.e("BaseViewModel", uiState.first().toString())
-            }
-
             merge(
                 getIntents(::mapIntents),
                 getInternalChanges(),

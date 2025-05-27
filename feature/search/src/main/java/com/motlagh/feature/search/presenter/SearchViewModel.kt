@@ -35,7 +35,6 @@ internal class SearchViewModel @Inject constructor(
     private val addBookmarkUseCase: AddBookmarkUseCase,
     private val removeBookmarkUseCase: RemoveBookmarkUseCase,
 ) : BaseViewModel<SearchUiState, SearchUiState.Partial, Nothing, SearchIntent>(
-    savableViewModel = true,
     savedStateHandle = savedStateHandle,
     initialState = SearchUiState.initialState()
 ) {
@@ -43,7 +42,7 @@ internal class SearchViewModel @Inject constructor(
      * i used this because list is not stable and
      * cause to extra recomposition in list when updating the list.
      * */
-    private val videosList: SnapshotStateList<VideoItemUiModel> = mutableStateListOf()
+    private val videosList = mutableStateListOf<VideoItemUiModel>()
 
     /**
      * i used this for apply debounce function in viewmodel.
@@ -60,7 +59,7 @@ internal class SearchViewModel @Inject constructor(
                 val mappedVideos = videoItems.map { it.toUIModel() }
                 videosList.clear()
                 videosList.addAll(mappedVideos)
-                NewListReceived(mappedVideos)
+                NewListReceived(videosList)
             } ?: NewListReceived(emptyList())
         }.stateIn(
             viewModelScope,
@@ -81,11 +80,15 @@ internal class SearchViewModel @Inject constructor(
 
             is SearchIntent.OnItemClicks -> {}
             is SearchIntent.BookMarkClicked -> {
+
                 if (intent.hasBookmark) {
                     removeBookmarkUseCase(intent.videoID)
-                } else
+                } else {
                     addBookmarkUseCase(intent.videoID)
+                }
             }
+
+            SearchIntent.OnBookmarkButtonClicked -> {}
         }
     }
 

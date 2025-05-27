@@ -11,19 +11,20 @@ import com.motlagh.feature.bookmark.presenter.ui.BookmarkScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
-object BookMarkRoute
+object BookMarksRoute
 
 fun NavHostController.navigateToBookmark() {
-    navigate(BookMarkRoute)
+    navigate(BookMarksRoute)
 }
 
 fun NavGraphBuilder.bookmarkScreen(
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
+    onVideoClicked: (String) -> Unit,
 ) {
     composable(
-        route = BookMarkRoute::class,
+        route = BookMarksRoute::class,
     ) { backStackEntry ->
-        BookmarkScreen()
+        BookmarkScreen(onBackPressed, onVideoClicked)
     }
 }
 

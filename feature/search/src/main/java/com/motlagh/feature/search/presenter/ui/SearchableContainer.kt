@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -27,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -45,10 +47,10 @@ import androidx.compose.ui.unit.sp
 @Composable
 internal fun SearchableContainer(
     searchQuery: () -> String,
+    onBookmarkClicked: () -> Unit,
     onQueryChange: (String) -> Unit,
     content: @Composable ColumnScope.() -> Unit
 ) {
-
 
     var isSearchBarExpanded by rememberSaveable { mutableStateOf(false) }
     val paddingAnimate =
@@ -77,24 +79,33 @@ internal fun SearchableContainer(
                     modifier = Modifier.height(32.dp)
                 )
 
-                Row(Modifier.fillMaxWidth()) {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                     Text(
                         modifier = Modifier.padding(start = 16.dp),
                         text = "Pixabay Videos",
-                        fontSize = 30.sp,
+                        fontSize = 25.sp,
                         fontFamily = FontFamily.SansSerif,
                         fontWeight = FontWeight.ExtraBold
                     )
+
+                    Text(
+                        modifier = Modifier
+                            .padding(end = 16.dp)
+                            .clickable(onClick = onBookmarkClicked),
+                        text = "Bookmarks",
+                        fontSize = 16.sp,
+                        fontFamily = FontFamily.SansSerif,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
-
-
 
                 Spacer(modifier = Modifier.height(8.dp))
             }
         }
 
+        val searchQuery by rememberUpdatedState(searchQuery())
         TextField(
-            value = searchQuery(),
+            value = searchQuery,
             onValueChange = onQueryChange,
             shape = RoundedCornerShape(paddingAnimate.value * 2),
             modifier = Modifier

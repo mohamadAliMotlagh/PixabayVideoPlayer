@@ -31,5 +31,7 @@ internal fun Project.configureAndroidCompose(
                 it.useJUnitPlatform()
             }
         }
+
+        
     }
 }

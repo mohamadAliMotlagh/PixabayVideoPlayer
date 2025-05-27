@@ -15,7 +15,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -32,9 +34,9 @@ import com.motlagh.feature.search.presenter.SearchViewModel
 
 @Composable
 internal fun SearchVideoRoute(
-    modifier: Modifier = Modifier.fillMaxSize(),
+    onBookmarkClicked: () -> Unit,
+    onItemClicks: (videoID: String) -> Unit,
     searchViewModel: SearchViewModel = hiltViewModel(),
-    onItemClicks: (videoID: String) -> Unit
 ) {
     val uiState = searchViewModel.uiState.collectAsStateWithLifecycle().value
 
@@ -42,6 +44,7 @@ internal fun SearchVideoRoute(
     {
         when (it) {
             is SearchIntent.OnItemClicks -> onItemClicks(it.videoID)
+            is SearchIntent.OnBookmarkButtonClicked -> onBookmarkClicked()
             else -> {
                 searchViewModel.acceptIntent(it)
             }
@@ -54,27 +57,27 @@ private fun SearchVideoScreen(
     uiState: () -> SearchUiState,
     onIntent: (SearchIntent) -> Unit
 ) {
+    val searchQuery by rememberUpdatedState(uiState().query)
+
+
     SearchableContainer(
-        searchQuery = { uiState().query },
+        searchQuery = { searchQuery },
 
         onQueryChange = {
             onIntent(SearchIntent.OnQueryChanged(it))
+        },
+        onBookmarkClicked = {
+            onIntent(SearchIntent.OnBookmarkButtonClicked)
         },
         content = {
             VideoList(
                 modifier = Modifier.fillMaxSize(),
                 videos = uiState().videos,
-                onVideoClick = { onIntent(SearchIntent.OnItemClicks(it))},
-                onBookmarkClick = {id, hasBookmark ->
+                onVideoClick = { onIntent(SearchIntent.OnItemClicks(it)) },
+                onBookmarkClick = { id, hasBookmark ->
                     onIntent(SearchIntent.BookMarkClicked(id, hasBookmark))
                 }
             )
         }
     )
-
-
-//        TextField(value = uiState().query, onValueChange = {
-//            onIntent(SearchIntent.OnQueryChanged(it))
-//        })
-
 }

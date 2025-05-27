@@ -13,7 +13,7 @@ internal suspend fun removeBookmarkUseCaseImpl(
     videoID: String,
     repository: RemoveBookmarkRepository,
 ) {
-    repository(videoID)
+    repository.removeBookmark(videoID)
 }
 
 
@@ -21,5 +21,5 @@ internal suspend fun addBookmarkUseCaseImpl(
     videoID: String,
     repository: AddBookmarkRepository,
 ) {
-    repository(videoID)
+    repository.addBookmark(videoID)
 }

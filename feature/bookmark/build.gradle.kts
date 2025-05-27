@@ -19,5 +19,6 @@ dependencies {
     implementation(projects.core.database)
     api(projects.core.network)
     implementation(projects.core.domain.video)
+    implementation(projects.core.ui)
 
 }

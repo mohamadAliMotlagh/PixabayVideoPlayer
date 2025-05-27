@@ -1,14 +1,16 @@
 package com.motlagh.core.ui.videolist
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.motlagh.core.designsystem.theme.PixabayVideoPlayerTheme
 import com.motlagh.core.ui.videoItem.VideoItemComponent
 import com.motlagh.core.ui.videoItem.VideoItemUiModel
@@ -20,6 +22,7 @@ fun VideoList(
     onBookmarkClick: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val list by rememberUpdatedState(videos)
 
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 250.dp),
@@ -28,9 +31,13 @@ fun VideoList(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = modifier
     ) {
-        items(videos, key = { it.id }) { video ->
+
+        items(list, key = { it.id }) { video ->
+
+            val rememberVideo by rememberUpdatedState(video)
+
             VideoItemComponent(
-                data = video,
+                data = { rememberVideo },
                 onItemClick = onVideoClick,
                 onBookmarkClick = onBookmarkClick
             )

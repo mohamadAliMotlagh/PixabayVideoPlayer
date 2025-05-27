@@ -4,10 +4,10 @@ import com.motlagh.core.domain.bookmarking.data.local.BookmarkLocalDataSource
 import com.motlagh.core.domain.bookmarking.domain.repository.RemoveBookmarkRepository
 import jakarta.inject.Inject
 
-class RemoveBookmarkRepositoryImpl @Inject constructor(
+internal class RemoveBookmarkRepositoryImpl @Inject constructor(
     private val bookmarkLocalDataSource: BookmarkLocalDataSource
 ) : RemoveBookmarkRepository {
-    override suspend fun invoke(videoId: String) {
+    override suspend fun removeBookmark(videoId: String) {
         bookmarkLocalDataSource.remove(videoId)
     }
 }

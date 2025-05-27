@@ -10,6 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.motlagh.core.designsystem.theme.PixabayVideoPlayerTheme
+import com.motlagh.feature.bookmark.presenter.navigation.bookmarkScreen
+import com.motlagh.feature.bookmark.presenter.navigation.navigateToBookmark
 import com.motlagh.feature.player.presenter.navigation.navigateToPlayer
 import com.motlagh.feature.player.presenter.navigation.playerScreen
 import com.motlagh.feature.search.presenter.navigation.SearchRoute
@@ -33,12 +35,17 @@ fun PixabayComposeApp() {
 private fun AppNavigation() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = SearchRoute) {
-        searchScreen(onVideoItemClicked = {
-            navController.navigateToPlayer(it)
-        })
 
-        playerScreen(onBackPressed = {
-            navController.popBackStack()
-        })
+        searchScreen(
+            onVideoItemClicked = navController::navigateToPlayer,
+            onBookmarkClicked = navController::navigateToBookmark
+        )
+
+        playerScreen(onBackPressed = navController::popBackStack)
+
+        bookmarkScreen(
+            onBackPressed = navController::popBackStack,
+            onVideoClicked = navController::navigateToPlayer
+        )
     }
 }

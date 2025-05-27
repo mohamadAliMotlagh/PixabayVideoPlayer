@@ -6,11 +6,19 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,27 +32,35 @@ import com.motlagh.core.ui.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VideoItemComponent(
-    data: VideoItemUiModel,
+    data: () -> VideoItemUiModel,
     onItemClick: (String) -> Unit,
     onBookmarkClick: (String, Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
+
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onItemClick(data.id) },
+            .clickable(onClick = { onItemClick(data().id) }),
         shape = MaterialTheme.shapes.medium
     ) {
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(16f / 9f)
         ) {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(data.thumbnailUrl)
+
+            val context = LocalContext.current
+            val rememberImage = remember {
+                ImageRequest.Builder(context)
+                    .data(data().thumbnailUrl)
                     .crossfade(true)
-                    .build(),
+                    .build()
+            }
+
+            AsyncImage(
+                model = rememberImage,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
@@ -64,7 +80,7 @@ fun VideoItemComponent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = data.username,
+                    text = data().username,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.weight(1f),
@@ -72,16 +88,10 @@ fun VideoItemComponent(
                     overflow = TextOverflow.Ellipsis
                 )
 
-                IconButton(
-                    onClick = { onBookmarkClick(data.id, data.isBookmarked) },
-                    modifier = Modifier.padding(start = 8.dp)
-                ) {
-                    Icon(
-                        imageVector = if (data.isBookmarked) AppIcons.BookMark else AppIcons.BookMarlOutlined,
-                        contentDescription = if (data.isBookmarked) stringResource(R.string.remove_from_bookmarks) else stringResource(
-                            R.string.add_to_bookmarks
-                        ),
-                        tint = if (data.isBookmarked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                key(data().id, data().isBookmarked) {
+                    BookmarkIcon(
+                        isBookmarked = data().isBookmarked,
+                        onClick = { onBookmarkClick(data().id, data().isBookmarked) }
                     )
                 }
             }
@@ -91,7 +101,7 @@ fun VideoItemComponent(
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                items(data.tags) { tag ->
+                items(data().tags) { tag ->
                     AssistChip(
                         onClick = { },
                         label = { Text(tag) }
@@ -100,6 +110,8 @@ fun VideoItemComponent(
             }
         }
     }
+
+
 }
 
 @Preview(showBackground = true)
@@ -107,15 +119,17 @@ fun VideoItemComponent(
 private fun VideoItemComponentPreview() {
     PixabayVideoPlayerTheme {
         VideoItemComponent(
-            data = VideoItemUiModel(
-                id = "1",
-                thumbnailUrl = "https://cdn.pixabay.com/video/2021/09/28/90090-620258401_medium.jpg",
-                username = "John Doe with a very long name that should wrap to the next line",
-                tags = listOf("nature", "beautiful", "landscape", "mountains", "sunset"),
-                isBookmarked = false
-            ),
+            data = {
+                VideoItemUiModel(
+                    id = "1",
+                    thumbnailUrl = "https://cdn.pixabay.com/video/2021/09/28/90090-620258401_medium.jpg",
+                    username = "John Doe with a very long name that should wrap to the next line",
+                    tags = listOf("nature", "beautiful", "landscape", "mountains", "sunset"),
+                    isBookmarked = false
+                )
+            },
             onItemClick = { },
-            onBookmarkClick = {_,_ -> }
+            onBookmarkClick = { _, _ -> }
         )
     }
 }
@@ -125,15 +139,32 @@ private fun VideoItemComponentPreview() {
 private fun VideoItemComponentBookmarkedPreview() {
     PixabayVideoPlayerTheme {
         VideoItemComponent(
-            data = VideoItemUiModel(
-                id = "1",
-                thumbnailUrl = "https://cdn.pixabay.com/video/2021/09/28/90090-620258401_medium.jpg",
-                username = "John Doe with a very long name that should wrap to the next line",
-                tags = listOf("nature", "beautiful", "landscape", "mountains", "sunset"),
-                isBookmarked = true
-            ),
+            data = {
+                VideoItemUiModel(
+                    id = "1",
+                    thumbnailUrl = "https://cdn.pixabay.com/video/2021/09/28/90090-620258401_medium.jpg",
+                    username = "John Doe with a very long name that should wrap to the next line",
+                    tags = listOf("nature", "beautiful", "landscape", "mountains", "sunset"),
+                    isBookmarked = true
+                )
+            },
             onItemClick = { },
-            onBookmarkClick = {_,_ -> }
+            onBookmarkClick = { _, _ -> }
         )
     }
-} 
+}
+
+
+@Composable
+private fun BookmarkIcon(
+    isBookmarked: Boolean,
+    onClick: () -> Unit
+) {
+    Icon(
+        modifier = Modifier
+            .padding(start = 8.dp)
+            .clickable { onClick() },
+        imageVector = if (isBookmarked) AppIcons.BookMark else AppIcons.BookMarlOutlined,
+        contentDescription = null,
+    )
+}

@@ -7,8 +7,9 @@ import kotlinx.parcelize.Parcelize
 
 
 
-@Immutable
+
 @Parcelize
+@Immutable
 internal data class SearchUiState(
     val query: String,
     val videos: List<VideoItemUiModel>,

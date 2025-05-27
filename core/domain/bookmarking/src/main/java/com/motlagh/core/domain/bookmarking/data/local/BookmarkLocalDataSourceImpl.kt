@@ -3,7 +3,7 @@ package com.motlagh.core.domain.bookmarking.data.local
 import com.motlagh.core.database.dao.VideoSearchDao
 import jakarta.inject.Inject
 
-class BookmarkLocalDataSourceImpl
+internal class BookmarkLocalDataSourceImpl
 @Inject constructor(
     private val dao: VideoSearchDao
 ) : BookmarkLocalDataSource {

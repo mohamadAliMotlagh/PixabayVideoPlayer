@@ -26,7 +26,11 @@ dependencyResolutionManagement {
             url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
         }
     }
+
+
 }
+
+
 
 rootProject.name = "PixabayVideoPlayer"
 
