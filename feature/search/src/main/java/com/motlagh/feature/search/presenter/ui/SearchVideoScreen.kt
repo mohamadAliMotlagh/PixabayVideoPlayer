@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -23,6 +24,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.motlagh.core.ui.videolist.VideoList
 import com.motlagh.feature.search.presenter.SearchIntent
 import com.motlagh.feature.search.presenter.SearchUiState
 import com.motlagh.feature.search.presenter.SearchViewModel
@@ -30,11 +32,14 @@ import com.motlagh.feature.search.presenter.SearchViewModel
 
 @Composable
 internal fun SearchVideoRoute(
+    modifier: Modifier = Modifier.fillMaxSize(),
     searchViewModel: SearchViewModel = hiltViewModel(),
     onItemClicks: (videoID: String) -> Unit
 ) {
-    val uiState = searchViewModel.uiState.collectAsStateWithLifecycle()
-    SearchVideoScreen(uiState.value) {
+    val uiState = searchViewModel.uiState.collectAsStateWithLifecycle().value
+
+    SearchVideoScreen({ uiState })
+    {
         when (it) {
             is SearchIntent.OnItemClicks -> onItemClicks(it.videoID)
             else -> {
@@ -46,30 +51,30 @@ internal fun SearchVideoRoute(
 
 @Composable
 private fun SearchVideoScreen(
-    uiState: SearchUiState,
+    uiState: () -> SearchUiState,
     onIntent: (SearchIntent) -> Unit
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        TextField(value = uiState.query, onValueChange = {
-            onIntent(SearchIntent.OnQueryChanged(it))
-        })
+    SearchableContainer(
+        searchQuery = { uiState().query },
 
-        LazyVerticalGrid(modifier = Modifier.fillMaxSize(), columns = GridCells.Adaptive(100.dp)) {
-            items(uiState.videos, key = { it.id }) {
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(it.thumbnailUrl)
-                        .crossfade(true)
-                        .build(),
-                    modifier = Modifier
-                        .fillMaxWidth(0.9f)
-                        .fillMaxHeight(0.9f * 0.6f)
-                        .clickable {
-                            onIntent(SearchIntent.OnItemClicks(it.id))
-                        },
-                    contentDescription = null,
-                )
-            }
+        onQueryChange = {
+            onIntent(SearchIntent.OnQueryChanged(it))
+        },
+        content = {
+            VideoList(
+                modifier = Modifier.fillMaxSize(),
+                videos = uiState().videos,
+                onVideoClick = { onIntent(SearchIntent.OnItemClicks(it))},
+                onBookmarkClick = {id, hasBookmark ->
+                    onIntent(SearchIntent.BookMarkClicked(id, hasBookmark))
+                }
+            )
         }
-    }
+    )
+
+
+//        TextField(value = uiState().query, onValueChange = {
+//            onIntent(SearchIntent.OnQueryChanged(it))
+//        })
+
 }

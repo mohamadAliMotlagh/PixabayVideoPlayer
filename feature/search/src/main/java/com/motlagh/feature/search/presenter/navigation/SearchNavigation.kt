@@ -1,5 +1,6 @@
 package com.motlagh.feature.search.presenter.navigation
 
+import androidx.compose.runtime.remember
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -16,6 +17,11 @@ fun NavController.navigateToSearch(navOptions: NavOptions) =
 
 fun NavGraphBuilder.searchScreen(onVideoItemClicked: (String) -> Unit) {
     composable<SearchRoute> {
-        SearchVideoRoute(onItemClicks = onVideoItemClicked)
+       val onItemClicks = remember {
+            { id: String ->
+                onVideoItemClicked(id)
+            }
+        }
+        SearchVideoRoute(onItemClicks = onItemClicks)
     }
 }

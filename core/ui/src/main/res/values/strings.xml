@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="remove_from_bookmarks">Remove from bookmarks</string>
+    <string name="add_to_bookmarks">Add to bookmarks</string>
+</resources>

@@ -1,10 +1,15 @@
 package com.motlagh.feature.search.presenter
 
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.motlagh.core.domain.bookmarking.domain.AddBookmarkUseCase
+import com.motlagh.core.domain.bookmarking.domain.RemoveBookmarkUseCase
 import com.motlagh.core.mvi.BaseViewModel
+import com.motlagh.core.ui.videoItem.VideoItemUiModel
 import com.motlagh.feature.search.domain.SearchUseCase
 import com.motlagh.feature.search.presenter.SearchUiState.Partial.*
 import com.motlagh.feature.search.presenter.mapper.toUIModel
@@ -22,10 +27,13 @@ import kotlinx.coroutines.flow.update
 import org.jetbrains.annotations.VisibleForTesting
 import javax.inject.Inject
 
+@Stable
 @HiltViewModel
 internal class SearchViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val searchUseCase: SearchUseCase
+    private val searchUseCase: SearchUseCase,
+    private val addBookmarkUseCase: AddBookmarkUseCase,
+    private val removeBookmarkUseCase: RemoveBookmarkUseCase,
 ) : BaseViewModel<SearchUiState, SearchUiState.Partial, Nothing, SearchIntent>(
     savableViewModel = true,
     savedStateHandle = savedStateHandle,
@@ -35,14 +43,14 @@ internal class SearchViewModel @Inject constructor(
      * i used this because list is not stable and
      * cause to extra recomposition in list when updating the list.
      * */
-    private val videosList: SnapshotStateList<Video> = uiState.value.videos.toMutableStateList()
+    private val videosList: SnapshotStateList<VideoItemUiModel> = mutableStateListOf()
 
     /**
      * i used this for apply debounce function in viewmodel.
      * i could do that in ui but i prefer to do it in viewmodel.
      * */
     private val queryFlow = MutableStateFlow(uiState.value.query)
-    private var searchResult = queryFlow
+    private val searchResult = queryFlow
         .debounce(500)
         .filter { it.isNotBlank() }
         .flatMapLatest { it ->
@@ -52,12 +60,12 @@ internal class SearchViewModel @Inject constructor(
                 val mappedVideos = videoItems.map { it.toUIModel() }
                 videosList.clear()
                 videosList.addAll(mappedVideos)
-                SearchUiState.Partial.NewListReceived(mappedVideos)
-            } ?: SearchUiState.Partial.NewListReceived(emptyList())
+                NewListReceived(mappedVideos)
+            } ?: NewListReceived(emptyList())
         }.stateIn(
             viewModelScope,
             SharingStarted.Eagerly,
-            SearchUiState.Partial.NewListReceived(emptyList())
+            NewListReceived(emptyList())
         )
 
     init {
@@ -72,6 +80,12 @@ internal class SearchViewModel @Inject constructor(
             }
 
             is SearchIntent.OnItemClicks -> {}
+            is SearchIntent.BookMarkClicked -> {
+                if (intent.hasBookmark) {
+                    removeBookmarkUseCase(intent.videoID)
+                } else
+                    addBookmarkUseCase(intent.videoID)
+            }
         }
     }
 
@@ -80,11 +94,11 @@ internal class SearchViewModel @Inject constructor(
         partialState: SearchUiState.Partial
     ): SearchUiState {
         return when (partialState) {
-            is SearchUiState.Partial.NewListReceived -> {
+            is NewListReceived -> {
                 previousState.copy(videos = partialState.videos)
             }
 
-            is SearchUiState.Partial.NewQueryReceived -> {
+            is NewQueryReceived -> {
                 previousState.copy(query = partialState.query)
             }
         }

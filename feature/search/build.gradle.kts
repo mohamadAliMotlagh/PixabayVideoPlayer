@@ -20,5 +20,6 @@ dependencies {
     implementation(projects.core.database)
     implementation(projects.core.domain.video)
     api(projects.core.network)
+    api(projects.core.ui)
     implementation(projects.core.domain.bookmarking)
 }

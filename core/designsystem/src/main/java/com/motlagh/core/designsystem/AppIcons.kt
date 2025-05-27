@@ -23,11 +23,15 @@ import androidx.compose.material.icons.outlined.Bookmarks
 import androidx.compose.material.icons.outlined.Upcoming
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.ShortText
+import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.CommentBank
+import androidx.compose.material.icons.outlined.Bookmark
 
 object AppIcons {
     val Add = Icons.Rounded.Add
     val Comment = Icons.Default.CommentBank
     val ThumbUp = Icons.Default.ThumbUp
     val Visibility = Icons.Default.Visibility
-} 
+    val BookMark = Icons.Filled.Bookmark
+    val BookMarlOutlined = Icons.Outlined.Bookmark
+}
