@@ -3,6 +3,7 @@ package com.motlagh.core.designsystem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.CommentBank
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.outlined.Bookmark
@@ -18,4 +19,5 @@ object AppIcons {
     val Visibility = Icons.Default.Visibility
     val BookMark = Icons.Filled.Bookmark
     val BookMarlOutlined = Icons.Outlined.BookmarkBorder
+    val Search = Icons.Default.Search
 }

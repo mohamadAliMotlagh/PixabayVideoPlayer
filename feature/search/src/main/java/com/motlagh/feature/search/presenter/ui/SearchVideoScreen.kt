@@ -16,10 +16,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -38,7 +42,8 @@ internal fun SearchVideoRoute(
     onItemClicks: (videoID: String) -> Unit,
     searchViewModel: SearchViewModel = hiltViewModel(),
 ) {
-    val uiState = searchViewModel.uiState.collectAsStateWithLifecycle().value
+    val uiState by searchViewModel.uiState.collectAsStateWithLifecycle()
+
 
     SearchVideoScreen({ uiState })
     {
@@ -57,27 +62,42 @@ private fun SearchVideoScreen(
     uiState: () -> SearchUiState,
     onIntent: (SearchIntent) -> Unit
 ) {
-    val searchQuery by rememberUpdatedState(uiState().query)
 
 
-    SearchableContainer(
-        searchQuery = { searchQuery },
+    Column(Modifier.fillMaxSize()) {
 
-        onQueryChange = {
-            onIntent(SearchIntent.OnQueryChanged(it))
-        },
-        onBookmarkClicked = {
-            onIntent(SearchIntent.OnBookmarkButtonClicked)
-        },
-        content = {
-            VideoList(
-                modifier = Modifier.fillMaxSize(),
-                videos = uiState().videos,
-                onVideoClick = { onIntent(SearchIntent.OnItemClicks(it)) },
-                onBookmarkClick = { id, hasBookmark ->
-                    onIntent(SearchIntent.BookMarkClicked(id, hasBookmark))
-                }
-            )
+        val isSearchBarExpanded = rememberSaveable { mutableStateOf(false) }
+        val remember = remember {
+            { it: Boolean ->
+                isSearchBarExpanded.value = it
+            }
         }
-    )
+
+        SearchableContainer(
+            isSearchBarExpanded = { isSearchBarExpanded.value },
+            searchQuery = { uiState.invoke().query },
+
+            onQueryChange = {
+                onIntent(SearchIntent.OnQueryChanged(it))
+            },
+            onBookmarkClicked = {
+                onIntent(SearchIntent.OnBookmarkButtonClicked)
+            },
+            onSearchBarExpanded = remember,
+            content = {
+                VideoList(
+                    modifier = Modifier.fillMaxSize(),
+                    videos = { uiState().videos },
+                    onVideoClick = { onIntent(SearchIntent.OnItemClicks(it)) },
+                    onBookmarkClick = { id, hasBookmark ->
+                        onIntent(SearchIntent.BookMarkClicked(id, hasBookmark))
+                    }
+                )
+            }
+        )
+
+
+    }
+
+
 }
