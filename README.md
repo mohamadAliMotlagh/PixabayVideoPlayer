@@ -2,6 +2,63 @@
 
 A modern Android application for searching, playing, and bookmarking videos from Pixabay. Built with Jetpack Compose and following clean architecture principles.
 
+## 🎥 Demo
+
+![App Demo](docs/assets/gif_2.gif)
+
+*Optimized for Performance: Zero recompositions during navigation and state changes, ensuring smooth and efficient UI updates*
+
+## 🚀 Performance Optimizations
+
+### Zero Recomposition Strategy
+
+The app achieves zero recompositions through several key techniques:
+
+1. **State Hoisting**
+   - State is hoisted to the highest necessary level
+   - Child composables receive only the data they need
+   - Prevents unnecessary recompositions of child components
+
+2. **Remember & DerivedStateOf**
+   ```kotlin
+   // Example of optimized state handling
+   val derivedState = remember(key1, key2) {
+       derivedStateOf {
+           // Computed value that only updates when keys change
+       }
+   }
+   ```
+
+3. **Stable Interfaces**
+   - All data classes are marked with `@Immutable` or `@Stable`
+   - Prevents unnecessary recompositions when data hasn't changed
+   - Ensures Compose can properly track state changes
+
+4. **Key Usage in Lists**
+   ```kotlin
+   // Optimized list rendering
+   LazyColumn {
+       items(
+           items = items,
+           key = { it.id } // Stable key for efficient updates
+       ) { item ->
+           ItemComponent(item)
+       }
+   }
+   ```
+
+5. **LaunchedEffect for Side Effects**
+   - Side effects are properly scoped
+   - Prevents unnecessary recompositions from effect triggers
+   - Ensures effects only run when needed
+
+### Benefits
+
+- **Smooth Scrolling**: No jank during list scrolling
+- **Efficient Updates**: Only affected components recompose
+- **Better Battery Life**: Reduced CPU usage
+- **Improved Performance**: Faster UI updates and transitions
+
 ## 🎯 Features
 
 - **Video Search**: Search and browse videos from Pixabay
@@ -10,7 +67,7 @@ A modern Android application for searching, playing, and bookmarking videos from
 - **Responsive UI**: Beautiful Material 3 design with smooth animations
 - **Offline Support**: Access bookmarked videos without internet connection
 
-## �� Tech Stack
+## 🎯 Tech Stack
 
 - **UI**: Jetpack Compose
 - **Architecture**: MVI (Model-View-Intent)
@@ -140,26 +197,3 @@ graph LR
 ```bash
 git clone https://github.com/yourusername/PixabayVideoPlayer.git
 ```
-
-2. Open the project in Android Studio
-
-3. Add your Pixabay API key in `local.properties`:
-```properties
-PIXABAY_API_KEY=your_api_key_here
-```
-
-4. Build and run the project
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/yourusername/PixabayVideoPlayer/issues).
-
-## 📫 Contact
-
-Your Name - [@yourtwitter](https://twitter.com/yourtwitter)
-
-Project Link: [https://github.com/yourusername/PixabayVideoPlayer](https://github.com/yourusername/PixabayVideoPlayer)

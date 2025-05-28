@@ -48,3 +48,7 @@ captures/
 # Kotlin
 .kotlin
 /app/release/*
+
+# Keep docs folder
+!docs/
+!docs/assets/
