@@ -7,16 +7,18 @@ import android.content.res.Configuration
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
@@ -41,6 +43,7 @@ internal fun PlayerScreen(
     val context = LocalContext.current
     val activity = context as? Activity
     val configuration = LocalConfiguration.current
+    var showControls by remember { mutableStateOf(true) }
 
     // Handle orientation changes
     LaunchedEffect(configuration.orientation) {
@@ -82,16 +85,14 @@ internal fun PlayerScreen(
             val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
             
             if (uiState.isFullscreen) {
-                // Hide system bars
                 windowInsetsController.apply {
                     hide(WindowInsetsCompat.Type.systemBars())
                     systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
                 }
                 it.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
             } else {
-                // Show system bars
                 windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
-                it.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR
+                it.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
             }
         }
     }
@@ -100,9 +101,7 @@ internal fun PlayerScreen(
         // Handle play/pause state changes
     }
 
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    Column(modifier = Modifier.fillMaxSize()) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -130,6 +129,47 @@ internal fun PlayerScreen(
                     }
                 }
             )
+
+            // Video Player Controls
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.3f))
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    AnimatedVisibility(
+                        visible = showControls,
+                        enter = fadeIn(),
+                        exit = fadeOut()
+                    ) {
+                        TopAppBar(
+                            title = { },
+                            navigationIcon = {
+                                IconButton(onClick = {
+                                    if (uiState.isFullscreen) {
+                                        viewModel.acceptIntent(PlayerIntent.ToggleFullscreen)
+                                    } else {
+                                        onBackPressed()
+                                    }
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.ArrowBack,
+                                        contentDescription = "Back",
+                                        tint = Color.White
+                                    )
+                                }
+                            },
+                            colors = TopAppBarDefaults.topAppBarColors(
+                                containerColor = Color.Transparent,
+                                titleContentColor = Color.White,
+                                navigationIconContentColor = Color.White
+                            )
+                        )
+                    }
+                }
+            }
         }
 
         if (!uiState.isFullscreen) {
