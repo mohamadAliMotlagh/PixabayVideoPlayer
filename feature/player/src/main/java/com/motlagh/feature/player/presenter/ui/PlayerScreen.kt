@@ -12,6 +12,8 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
@@ -21,6 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -32,7 +36,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.motlagh.feature.player.presenter.PlayerIntent
 import com.motlagh.feature.player.presenter.PlayerViewModel
 
-@SuppressLint("ComposeModifierMissing")
+@SuppressLint("ComposeModifierMissing", "ConfigurationScreenWidthHeight")
 @Composable
 internal fun PlayerScreen(
     viewModel: PlayerViewModel = hiltViewModel(),
@@ -44,14 +48,26 @@ internal fun PlayerScreen(
     val activity = context as? Activity
     val configuration = LocalConfiguration.current
     var showControls by remember { mutableStateOf(true) }
+    val scrollState = rememberScrollState()
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val density = LocalDensity.current
+    val screenHeight = with(density) { 
+        if (uiState.isFullscreen) {
+            configuration.screenHeightDp.dp
+        } else {
+            (configuration.screenHeightDp * 0.9).dp
+        }
+    }
 
-    // Handle orientation changes
+    /*
+    // Handle orientation changes when enter full screen but i removed for presenting keep state in configuration change.
     LaunchedEffect(configuration.orientation) {
         val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
         if (isLandscape != uiState.isFullscreen) {
             viewModel.acceptIntent(PlayerIntent.ToggleFullscreen)
         }
     }
+    */
 
     BackHandler(enabled = true) {
         if (uiState.isFullscreen) {
@@ -101,11 +117,23 @@ internal fun PlayerScreen(
         // Handle play/pause state changes
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+            .navigationBarsPadding()
+            .verticalScroll(scrollState)
+    ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(16f / 9f)
+            modifier = if (isLandscape) {
+                Modifier
+                    .fillMaxWidth()
+                    .height(screenHeight)
+            } else {
+                Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(16f / 9f)
+            }
         ) {
             AndroidView(
                 factory = { context ->
@@ -175,7 +203,7 @@ internal fun PlayerScreen(
         if (!uiState.isFullscreen) {
             VideoDetails(
                 uiState = uiState,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }
