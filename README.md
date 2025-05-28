@@ -4,7 +4,7 @@ A modern Android application for searching, playing, and bookmarking videos from
 
 ## 🎥 Demo
 
-![App Demo](docs/assets/gif_2.gif)
+<img src="docs/assets/gif_2.gif" width="60%" alt="App Demo">
 
 *Optimized for Performance: Zero recompositions during navigation and state changes, ensuring smooth and efficient UI updates*
 
