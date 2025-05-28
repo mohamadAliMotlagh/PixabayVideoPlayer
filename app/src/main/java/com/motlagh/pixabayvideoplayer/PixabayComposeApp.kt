@@ -3,6 +3,7 @@ package com.motlagh.pixabayvideoplayer
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -17,12 +18,15 @@ import com.motlagh.feature.player.presenter.navigation.playerScreen
 import com.motlagh.feature.search.presenter.navigation.SearchRoute
 import com.motlagh.feature.search.presenter.navigation.searchScreen
 
-
 @SuppressLint("ComposeModifierMissing")
 @Composable
 fun PixabayComposeApp() {
     PixabayVideoPlayerTheme {
-        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+        Scaffold(
+            modifier = Modifier
+                .fillMaxSize()
+                .statusBarsPadding()
+        ) { innerPadding ->
             Surface(modifier = Modifier.padding(innerPadding)) {
                 AppNavigation()
             }
@@ -30,12 +34,10 @@ fun PixabayComposeApp() {
     }
 }
 
-
 @Composable
 private fun AppNavigation() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = SearchRoute) {
-
         searchScreen(
             onVideoItemClicked = navController::navigateToPlayer,
             onBookmarkClicked = navController::navigateToBookmark
