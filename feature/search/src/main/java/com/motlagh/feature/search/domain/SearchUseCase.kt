@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 fun interface SearchUseCase : suspend (String) -> Flow<Result<List<VideoItemDomainModel>>>
 
-`
+
 internal suspend fun searchUseCaseImpl(
     query: String,
     repository: SearchVideoRepository,
