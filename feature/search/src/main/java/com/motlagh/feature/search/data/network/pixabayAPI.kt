@@ -13,6 +13,5 @@ interface SearchApi {
         @Query("q") query: String,
         @Query("per_page") perPage: Int = 200,
 
-
     ): SearchDTO
 }
