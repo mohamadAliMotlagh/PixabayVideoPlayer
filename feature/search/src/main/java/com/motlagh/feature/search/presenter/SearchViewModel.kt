@@ -40,14 +40,12 @@ internal class SearchViewModel @Inject constructor(
     initialState = SearchUiState.initialState()
 ) {
     /**
-     * i used this because list is not stable and
-     * cause to extra recomposition in list when updating the list.
+     *  i used this because list is not stable and cause to extra recomposition in list when updating the list.
      * */
     private val videosList = mutableStateListOf<VideoItemUiModel>()
 
     /**
-     * i used this for apply debounce function in viewmodel.
-     * i could do that in ui but i prefer to do it in viewmodel.
+     * i used this for apply debounce function in viewmodel i could do that in ui but i prefer to do it in viewmodel.
      * */
     private val queryFlow = MutableStateFlow(uiState.value.query)
     private val searchResult = queryFlow

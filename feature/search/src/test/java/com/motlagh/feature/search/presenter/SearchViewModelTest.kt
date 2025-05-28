@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import kotlin.time.Duration.Companion.milliseconds
 /**
-* tests could be more in here but i did not had have time
+* todo tests could be more in here but i did not had have time
 * */
 @ExtendWith(MainCoroutineExtension::class)
 class SearchViewModelTest {
