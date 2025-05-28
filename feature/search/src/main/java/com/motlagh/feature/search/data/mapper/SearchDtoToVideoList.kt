@@ -1,20 +1,26 @@
 package com.motlagh.feature.search.data.mapper
 
 import com.motlagh.domain.video.VideoItemDomainModel
+import com.motlagh.feature.search.data.remote.dto.Hit
 import com.motlagh.feature.search.data.remote.dto.SearchDTO
 
 
-internal fun SearchDTO.toVideoItems() = hits?.map {
+internal fun Hit.toVideoDomainModel() = with(this) {
     VideoItemDomainModel(
-        videoUrl = it?.videos?.medium?.url ?: "",
-        id = it?.id.toString(),
-        tags = it?.tags?.split(",") ?: listOf(),
-        views = it?.views ?: 0,
-        likes = it?.likes ?: 0,
-        username = it?.user ?: "",
-        comments = it?.comments ?: 0,
+        videoUrl = videos?.medium?.url ?: "",
+        id = id.toString(),
+        tags = tags?.split(",") ?: listOf(),
+        views = views ?: 0,
+        likes = likes ?: 0,
+        username = user ?: "",
+        comments = comments ?: 0,
         isBookmarked = false,
-        thumbnailUrl = it?.videos?.medium?.thumbnail ?: ""
+        thumbnailUrl = videos?.medium?.thumbnail ?: ""
     )
-} ?: listOf()
+}
+
+
+
+
+
 

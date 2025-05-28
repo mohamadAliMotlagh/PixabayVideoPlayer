@@ -2,6 +2,7 @@ package com.motlagh.feature.search.data.mapper
 
 import com.motlagh.core.database.model.VideoEntity
 import com.motlagh.domain.video.VideoItemDomainModel
+import com.motlagh.feature.search.data.remote.dto.Hit
 
 
 internal fun VideoItemDomainModel.toVideoEntity() = VideoEntity(
@@ -17,7 +18,7 @@ internal fun VideoItemDomainModel.toVideoEntity() = VideoEntity(
 )
 
 
-fun VideoEntity.toVideoItem() = VideoItemDomainModel(
+fun VideoEntity.toVideoDomainModel() = VideoItemDomainModel(
     id = id,
     thumbnailUrl = thumbnailUrl,
     videoUrl = videoUrl,

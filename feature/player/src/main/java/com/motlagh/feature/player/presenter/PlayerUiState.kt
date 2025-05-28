@@ -28,7 +28,7 @@ data class PlayerUiState(
         fun initialState() = PlayerUiState(
             videoUrl = "",
 
-        )
+            )
     }
 }
 

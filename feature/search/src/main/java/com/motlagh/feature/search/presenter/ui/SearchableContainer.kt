@@ -26,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -93,7 +94,7 @@ internal fun SearchableContainer(
                 ) {
                     Text(
                         modifier = Modifier.padding(start = 16.dp),
-                        text = "Pixabay Videos",
+                        text = stringResource(R.string.pixabay_videos),
                         fontSize = 25.sp,
                         fontFamily = FontFamily.SansSerif,
                         fontWeight = FontWeight.ExtraBold
@@ -103,7 +104,7 @@ internal fun SearchableContainer(
                         modifier = Modifier
                             .padding(end = 16.dp)
                             .clickable(onClick = onBookmarkClicked),
-                        text = "Bookmarks",
+                        text = stringResource(R.string.bookmarks),
                         fontSize = 16.sp,
                         fontFamily = FontFamily.SansSerif,
                         fontWeight = FontWeight.Bold
@@ -157,17 +158,9 @@ private fun SearchBar(
         label = "paddingAnimation"
     )
 
-    TextField(
-        value = value(),
-        onValueChange = onQueryChange,
+    Column(
         modifier = Modifier
             .fillMaxWidth()
-            .focusRequester(focusRequester)
-            .onFocusChanged {
-                if (it.hasFocus) {
-                    onExpandedChange(true)
-                }
-            }
             .graphicsLayer {
                 val visualInsetPx = paddingAnimate.value.dp.toPx() // Your animated Dp value
                 shape = RoundedCornerShape(visualInsetPx * 2)
@@ -175,35 +168,48 @@ private fun SearchBar(
                 translationX = visualInsetPx
                 scaleX = (size.width - 2 * visualInsetPx) / size.width
                 transformOrigin = TransformOrigin(0f, 0f)
+            }) {
+        TextField(
+            value = value(),
+            onValueChange = onQueryChange,
+            modifier = Modifier
+                .fillMaxWidth()
+                .focusRequester(focusRequester)
+                .onFocusChanged {
+                    if (it.hasFocus) {
+                        onExpandedChange(true)
+                    }
+                },
+            interactionSource = interactionSource,
+            placeholder = { Text(text = "Search") },
+            colors = TextFieldDefaults.colors().copy(
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(onDone = {
+                focusManager.clearFocus(true)
+            }),
+            trailingIcon = {
+                val hasQuery by remember { derivedStateOf { value().isNotEmpty() } }
+                val hasQueryRemember by rememberUpdatedState(hasQuery)
+                val isExpandedRemember by rememberUpdatedState(isExpanded())
+                SearchBarTrailingIcon(
+                    hasQuery = { hasQueryRemember },
+                    isExpanded = { isExpandedRemember },
+                    onClearClick = onClearClick,
+                    onCancelClick = onCancelClick
+                )
             },
-        interactionSource = interactionSource,
-        placeholder = { Text(text = "Search") },
-        colors = TextFieldDefaults.colors().copy(
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent
-        ),
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-        keyboardActions = KeyboardActions(onDone = {
-            focusManager.clearFocus(true)
-        }),
-        trailingIcon = {
-            val hasQuery by remember { derivedStateOf { value().isNotEmpty() } }
-            val hasQueryRemember by rememberUpdatedState(hasQuery)
-            val isExpandedRemember by rememberUpdatedState(isExpanded())
-            SearchBarTrailingIcon(
-                hasQuery = { hasQueryRemember },
-                isExpanded = { isExpandedRemember },
-                onClearClick = onClearClick,
-                onCancelClick = onCancelClick
-            )
-        },
-        leadingIcon = {
-            Icon(
-                imageVector = AppIcons.Search,
-                contentDescription = stringResource(R.string.search)
-            )
-        }
-    )
+            leadingIcon = {
+                Icon(
+                    imageVector = AppIcons.Search,
+                    contentDescription = stringResource(R.string.search)
+                )
+            }
+        )
+    }
+
 
 }
 
@@ -223,7 +229,7 @@ private fun SearchBarTrailingIcon(
             Icon(
                 modifier = Modifier.clickable(onClick = onClearClick),
                 imageVector = Icons.Default.Close,
-                contentDescription = "clear"
+                contentDescription = stringResource(R.string.clear)
             )
         }
 
@@ -234,7 +240,7 @@ private fun SearchBarTrailingIcon(
         if (showCancel) {
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = "Cancel",
+                text = stringResource(R.string.cancel),
                 modifier = Modifier.clickable(onClick = onCancelClick)
             )
             Spacer(modifier = Modifier.width(8.dp))

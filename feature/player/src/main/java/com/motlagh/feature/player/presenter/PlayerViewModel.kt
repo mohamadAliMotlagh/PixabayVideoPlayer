@@ -19,7 +19,6 @@ internal class PlayerViewModel @Inject constructor(
 ) : BaseViewModel<PlayerUiState, PlayerUiState.Partial, Nothing, PlayerIntent>(
     savedStateHandle = savedStateHandle,
     initialState = PlayerUiState.initialState(),
-    savableViewModel = true
 ) {
 
 

@@ -1,6 +1,8 @@
 package com.motlagh.feature.search.presenter.ui
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.snapping.SnapPosition
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -12,6 +14,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -21,6 +24,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
@@ -46,7 +50,7 @@ internal fun SearchVideoRoute(
     val uiState by searchViewModel.uiState.collectAsStateWithLifecycle()
 
 
-    SearchVideoScreen({ uiState })
+    SearchVideoScreen({uiState})
     {
         when (it) {
             is SearchIntent.OnItemClicks -> onItemClicks(it.videoID)
@@ -64,22 +68,53 @@ private fun SearchVideoScreen(
     onIntent: (SearchIntent) -> Unit
 ) {
 
+
     SearchableContainer(
         searchQuery = { uiState().query },
         onQueryChange = {
-                onIntent(SearchIntent.OnQueryChanged(it)) },
+            onIntent(SearchIntent.OnQueryChanged(it))
+        },
         onBookmarkClicked = {
             onIntent(SearchIntent.OnBookmarkButtonClicked)
         },
         content = {
-            VideoList(
-                modifier = Modifier.fillMaxSize(),
-                videos = uiState().videos,
-                onVideoClick = { onIntent(SearchIntent.OnItemClicks(it)) },
-                onBookmarkClick = { id, hasBookmark ->
-                    onIntent(SearchIntent.BookMarkClicked(id, hasBookmark))
-                }
-            )
-        }
-    )
+
+            if (uiState().showError) {
+                Error()
+            } else if (uiState().videos.isEmpty() && uiState().loading) {
+                Loading()
+            } else {
+                VideoList(
+                    modifier = Modifier,
+                    videos = uiState().videos,
+                    onVideoClick = { onIntent(SearchIntent.OnItemClicks(it)) },
+                    onBookmarkClick = { id, hasBookmark ->
+                        onIntent(SearchIntent.BookMarkClicked(id, hasBookmark))
+                    }
+                )
+            }
+        })
+}
+
+@Composable
+fun Loading(
+    modifier: Modifier = Modifier
+) {
+    Box(Modifier.fillMaxSize()) {
+        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+    }
+}
+
+@Composable
+fun Error(modifier: Modifier = Modifier) {
+
+    Box(
+        modifier
+            .fillMaxSize()
+            .then(modifier)
+    ) {
+
+        Text("An Error Happened")
+
+    }
 }

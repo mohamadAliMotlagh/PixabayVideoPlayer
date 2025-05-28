@@ -2,6 +2,7 @@ package com.motlagh.core.ui.videolist
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -23,25 +24,23 @@ fun VideoList(
     modifier: Modifier = Modifier
 ) {
     val list by rememberUpdatedState(videos)
-
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 250.dp),
         contentPadding = PaddingValues(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = modifier
+        modifier = modifier.fillMaxSize()
     ) {
 
         items(list, key = { it.id }) { video ->
-
             val rememberVideo by rememberUpdatedState(video)
-
             VideoItemComponent(
                 data = { rememberVideo },
                 onItemClick = onVideoClick,
                 onBookmarkClick = onBookmarkClick
             )
         }
+
     }
 }
 

@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SearchDTO(
     @SerialName("hits")
-    val hits: List<Hit?>?,
+    val hits: List<Hit>?,
     @SerialName("total")
     val total: Int?,
     @SerialName("totalHits")

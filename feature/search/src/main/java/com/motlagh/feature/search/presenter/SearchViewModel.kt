@@ -1,5 +1,6 @@
 package com.motlagh.feature.search.presenter
 
+import android.util.Log
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -11,20 +12,29 @@ import com.motlagh.core.domain.bookmarking.domain.AddBookmarkUseCase
 import com.motlagh.core.domain.bookmarking.domain.RemoveBookmarkUseCase
 import com.motlagh.core.mvi.BaseViewModel
 import com.motlagh.core.ui.videoItem.VideoItemUiModel
+import com.motlagh.domain.video.VideoItemDomainModel
 import com.motlagh.feature.search.domain.SearchUseCase
 import com.motlagh.feature.search.presenter.SearchUiState.Partial.*
 import com.motlagh.feature.search.presenter.mapper.toUIModel
+import com.motlagh.feature.search.presenter.ui.Error
+import com.motlagh.feature.search.presenter.ui.Loading
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import org.jetbrains.annotations.VisibleForTesting
 import javax.inject.Inject
 
@@ -53,16 +63,14 @@ internal class SearchViewModel @Inject constructor(
     private val searchResult = queryFlow
         .debounce(500)
         .filter { it.isNotBlank() }
-        .flatMapLatest { it ->
-            searchUseCase(it)
-        }.map { result ->
-            result.getOrNull()?.let { videoItems ->
-                val mappedVideos = videoItems.map { it.toUIModel() }
-                videosList.clear()
-                videosList.addAll(mappedVideos)
-                NewListReceived(videosList)
-            } ?: NewListReceived(emptyList())
-        }.stateIn(
+        .onEach {
+            acceptIntent(SearchIntent.Loading(true))
+        }
+        .flatMapLatest(searchUseCase)
+        .flatMapLatest {
+            mapResult(it)
+        }
+        .stateIn(
             viewModelScope,
             SharingStarted.Eagerly,
             NewListReceived(emptyList())
@@ -71,6 +79,21 @@ internal class SearchViewModel @Inject constructor(
     init {
         acceptChanges(searchResult)
     }
+
+
+    private fun mapResult(result: Result<List<VideoItemDomainModel>>) = flow {
+        result.fold(onSuccess = { videoItems ->
+            val mappedVideos = videoItems.map { it.toUIModel() }
+            videosList.clear()
+            videosList.addAll(mappedVideos)
+            emit(Loading(mappedVideos.isEmpty()))
+            emit(NewListReceived(videosList))
+        }, onFailure = {
+            emit(NewListReceived(emptyList()))
+            emit(HasError(true))
+        })
+    }
+
 
     override fun mapIntents(intent: SearchIntent): Flow<SearchUiState.Partial> = flow {
         when (intent) {
@@ -81,7 +104,6 @@ internal class SearchViewModel @Inject constructor(
 
             is SearchIntent.OnItemClicks -> {}
             is SearchIntent.BookMarkClicked -> {
-
                 if (intent.hasBookmark) {
                     removeBookmarkUseCase(intent.videoID)
                 } else {
@@ -90,6 +112,9 @@ internal class SearchViewModel @Inject constructor(
             }
 
             SearchIntent.OnBookmarkButtonClicked -> {}
+            is SearchIntent.Loading -> emit(Loading(intent.isLoading))
+
+            is SearchIntent.Error -> {}
         }
     }
 
@@ -99,11 +124,24 @@ internal class SearchViewModel @Inject constructor(
     ): SearchUiState {
         return when (partialState) {
             is NewListReceived -> {
-                previousState.copy(videos = partialState.videos)
+                previousState.copy(
+                    videos = partialState.videos,
+                    showError = false
+                )
             }
 
             is NewQueryReceived -> {
-                previousState.copy(query = partialState.query)
+                previousState.copy(
+                    query = partialState.query
+                )
+            }
+
+            is Loading -> {
+                previousState.copy(loading = partialState.isLoading, showError = false)
+            }
+
+            is HasError -> {
+                previousState.copy(loading = false, showError = partialState.show)
             }
         }
     }
