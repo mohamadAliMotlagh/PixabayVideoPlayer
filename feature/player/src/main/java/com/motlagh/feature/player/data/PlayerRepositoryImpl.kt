@@ -33,19 +33,24 @@ class PlayerRepositoryImpl @Inject constructor(
                 exoPlayer.addListener(object : Player.Listener {
                     override fun onPlaybackStateChanged(playbackState: Int) {
                         if (playbackState == Player.STATE_READY) {
+
                             if (!isInitialized) {
+
                                 isInitialized = true
                                 exoPlayer.seekTo(savedPosition)
+
                                 if (shouldPlay) {
                                     exoPlayer.play()
                                 }
                             }
+
                             onPositionChanged?.invoke(exoPlayer.currentPosition)
                         }
                     }
                 })
             }
         }
+
         return player!!
     }
 
@@ -79,6 +84,7 @@ class PlayerRepositoryImpl @Inject constructor(
         player?.let { exoPlayer ->
             if (exoPlayer.playbackState == Player.STATE_READY) {
                 exoPlayer.seekTo(position)
+
                 if (shouldPlay) {
                     exoPlayer.play()
                 } else {

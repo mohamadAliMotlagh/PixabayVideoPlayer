@@ -1,7 +1,6 @@
 package com.motlagh.lint
 
 import com.android.tools.lint.detector.api.CURRENT_API
-import com.motlagh.lint.DomainLayerDependencyDetector.Companion.ISSUE_DOMAIN_DEPENDS_ON_OTHER_LAYERS
 import com.motlagh.lint.DomainAndroidImportDetector.Companion.ISSUE_ANDROID_IMPORT_IN_DOMAIN
 import com.motlagh.lint.LineSpacingDetector.Companion.ISSUE_LINE_SPACING
 import com.motlagh.lint.NamingConventionDetector.Companion.ISSUE_REPOSITORY_NAMING
@@ -19,7 +18,6 @@ class IssueRegistry : com.android.tools.lint.client.api.IssueRegistry() {
             ISSUE_VIEWMODEL_NAMING,
             ISSUE_LINE_SPACING,
             ISSUE_USECASE_NAMING,
-            ISSUE_REPOSITORY_NAMING,
-            ISSUE_DOMAIN_DEPENDS_ON_OTHER_LAYERS
+            ISSUE_REPOSITORY_NAMING
         )
 }

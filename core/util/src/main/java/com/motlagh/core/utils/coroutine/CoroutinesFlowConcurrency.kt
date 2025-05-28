@@ -88,6 +88,7 @@ fun <T, R> Flow<T>.flatMapConcurrently(
 
             var exceptionWasThrownEarlier = CompletableDeferred<Nothing>()
             while (true) {
+
                 val dataResult = try {
                     select<ChannelResult<T>> {
                         channel.onReceiveCatching { it }
@@ -97,13 +98,17 @@ fun <T, R> Flow<T>.flatMapConcurrently(
                     upstreamJob.cancel(thrown.asCancellation())
                     break
                 }
+
                 if (dataResult.isClosed) {
                     val ex = dataResult.exceptionOrNull()
+
                     if (ex != null) {
                         emit(async { throw ex })
                     }
+
                     break
                 }
+
                 val data = dataResult.getOrThrow()
 
                 // Deferred that will be completed exceptionally if evaluating transform on any value before t, or
