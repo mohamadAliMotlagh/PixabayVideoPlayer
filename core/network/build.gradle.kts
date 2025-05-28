@@ -6,9 +6,6 @@ plugins {
 
 android {
     namespace = "com.motlagh.core.network"
-    buildFeatures {
-        buildConfig = true
-    }
 }
 
 dependencies {

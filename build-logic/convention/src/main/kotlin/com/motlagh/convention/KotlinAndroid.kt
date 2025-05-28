@@ -41,6 +41,9 @@ internal fun Project.configureKotlinAndroid(
         defaultConfig {
             minSdk = 24
         }
+        buildFeatures {
+            buildConfig = true
+        }
 
         compileOptions {
             // Up to Java 11 APIs are available through desugaring

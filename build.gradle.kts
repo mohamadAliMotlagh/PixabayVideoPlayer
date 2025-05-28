@@ -1,4 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+import java.util.Properties // Make sure this import is present
+
+
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
@@ -46,6 +49,19 @@ subprojects {
                             "${project.rootProject.buildDir}/compose_compiler/${project.name}/metrics"
                 )
             }
+        }
+    }
+}
+
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    val properties = Properties()
+    localPropertiesFile.inputStream().use { properties.load(it) }
+    properties.forEach { name, value ->
+        // project.extra.set(name.toString(), value.toString())
+        // Or, to make them available as regular project properties for findProperty in subprojects:
+        allprojects { // Or subprojects { }
+            ext.set(name.toString(), value.toString())
         }
     }
 }

@@ -9,6 +9,6 @@ import jakarta.inject.Inject
 class SearchVideoRemoteDataSourceImpl @Inject constructor(private val searchApi: SearchApi) :
     SearchVideoRemoteDataSource {
     override suspend fun searchVideos(query: String): Result<SearchDTO> {
-        return resultOf {  searchApi.searchVideos(query) }
+        return resultOf {  searchApi.searchVideos(query = query) }
     }
 }

@@ -7,6 +7,10 @@ plugins {
 
 android {
     namespace = "com.motlagh.feature.search"
+
+    defaultConfig {
+        buildConfigField("String", "PIXABAY_API_KEY", "\"${project.findProperty("PIXABAY_API_KEY") ?: ""}\"")
+    }
 }
 dependencies {
     implementation(libs.androidx.core.ktx)
