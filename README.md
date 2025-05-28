@@ -108,10 +108,10 @@ graph LR
     Player -.-> CoreDesign
     
     %% Style
-    classDef module fill:#f9f,stroke:#333,stroke-width:2px
-    classDef core fill:#bbf,stroke:#333,stroke-width:2px
-    classDef domain fill:#fbb,stroke:#333,stroke-width:2px
-    classDef feature fill:#bfb,stroke:#333,stroke-width:2px
+    classDef module fill:#E3F2FD,stroke:#1976D2,stroke-width:2px,color:#0D47A1
+    classDef core fill:#E8F5E9,stroke:#2E7D32,stroke-width:2px,color:#1B5E20
+    classDef domain fill:#FFF3E0,stroke:#E65100,stroke-width:2px,color:#BF360C
+    classDef feature fill:#F3E5F5,stroke:#6A1B9A,stroke-width:2px,color:#4A148C
     
     class Root,App module
     class CoreUI,CoreNetwork,CoreDB,CoreDesign,CoreMVI,CoreUtil,CoreTest core
