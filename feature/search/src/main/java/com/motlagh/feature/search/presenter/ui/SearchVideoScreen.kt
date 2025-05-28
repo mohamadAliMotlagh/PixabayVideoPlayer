@@ -79,19 +79,23 @@ private fun SearchVideoScreen(
         },
         content = {
 
-            if (uiState().showError) {
-                Error()
-            } else if (uiState().videos.isEmpty() && uiState().loading) {
-                Loading()
-            } else {
-                VideoList(
-                    modifier = Modifier,
-                    videos = uiState().videos,
-                    onVideoClick = { onIntent(SearchIntent.OnItemClicks(it)) },
-                    onBookmarkClick = { id, hasBookmark ->
-                        onIntent(SearchIntent.BookMarkClicked(id, hasBookmark))
-                    }
-                )
+            when {
+                uiState().videos.isEmpty() && uiState().showError -> {
+                    Error()
+                }
+                uiState().videos.isEmpty() && uiState().loading -> {
+                    Loading()
+                }
+                else -> {
+                    VideoList(
+                        modifier = Modifier,
+                        videos = uiState().videos,
+                        onVideoClick = { onIntent(SearchIntent.OnItemClicks(it)) },
+                        onBookmarkClick = { id, hasBookmark ->
+                            onIntent(SearchIntent.BookMarkClicked(id, hasBookmark))
+                        }
+                    )
+                }
             }
         })
 }
