@@ -2,9 +2,11 @@ package com.motlagh.feature.search.presenter
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.motlagh.core.domain.bookmarking.domain.AddBookmarkUseCase
+import com.motlagh.core.domain.bookmarking.domain.RemoveBookmarkUseCase
 import com.motlagh.core.testing.MainCoroutineExtension
+import com.motlagh.domain.video.VideoItemDomainModel
 import com.motlagh.feature.search.domain.SearchUseCase
-import com.motlagh.feature.search.domain.model.VideoItemDomainModel
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -18,12 +20,20 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import kotlin.time.Duration.Companion.milliseconds
-
+/**
+* tests could be more in here but i did not had have time
+* */
 @ExtendWith(MainCoroutineExtension::class)
 class SearchViewModelTest {
 
     @MockK
     private lateinit var searchUseCase: SearchUseCase
+
+    @MockK
+    private lateinit var addBookmark: AddBookmarkUseCase
+
+    @MockK
+    private lateinit var removeBookmark: RemoveBookmarkUseCase
 
     private val initialState = SearchUiState.initialState()
     private val savedStateHandle = SavedStateHandle()
@@ -37,7 +47,9 @@ class SearchViewModelTest {
 
         viewModel = SearchViewModel(
             savedStateHandle = savedStateHandle,
-            searchUseCase = searchUseCase
+            searchUseCase = searchUseCase,
+            addBookmarkUseCase = addBookmark,
+            removeBookmarkUseCase = removeBookmark
         )
     }
 
@@ -85,9 +97,11 @@ class SearchViewModelTest {
             viewModel.uiState.test {
                 val queryState = awaitItem()
                 assertEquals(query, queryState.query)
-                delay(500)
+                delay(1500)
                 val list = awaitItem()
-                assertTrue { list.videos.isNotEmpty() }
+                assertTrue { list.videos.isEmpty() }
+                val list1 = awaitItem()
+                assertTrue { list1.videos.isNotEmpty() }
             }
         }
 
@@ -102,10 +116,11 @@ class SearchViewModelTest {
 
         viewModel.uiState.test {
 
-            delay(600.milliseconds)
+            delay(700.milliseconds)
             val queryState = awaitItem()
             assertEquals(query, queryState.query)
-            assertTrue(queryState.videos.isEmpty())
+            val queryState2 = awaitItem()
+            assertTrue(queryState2.videos.isEmpty())
         }
     }
 

@@ -1,11 +1,7 @@
 package com.motlagh.feature.search.presenter
 
-import android.util.Log
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.motlagh.core.domain.bookmarking.domain.AddBookmarkUseCase
@@ -14,28 +10,22 @@ import com.motlagh.core.mvi.BaseViewModel
 import com.motlagh.core.ui.videoItem.VideoItemUiModel
 import com.motlagh.domain.video.VideoItemDomainModel
 import com.motlagh.feature.search.domain.SearchUseCase
-import com.motlagh.feature.search.presenter.SearchUiState.Partial.*
+import com.motlagh.feature.search.presenter.SearchUiState.Partial.HasError
+import com.motlagh.feature.search.presenter.SearchUiState.Partial.Loading
+import com.motlagh.feature.search.presenter.SearchUiState.Partial.NewListReceived
+import com.motlagh.feature.search.presenter.SearchUiState.Partial.NewQueryReceived
 import com.motlagh.feature.search.presenter.mapper.toUIModel
-import com.motlagh.feature.search.presenter.ui.Error
-import com.motlagh.feature.search.presenter.ui.Loading
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
-import org.jetbrains.annotations.VisibleForTesting
 import javax.inject.Inject
 
 @Stable
@@ -66,9 +56,8 @@ internal class SearchViewModel @Inject constructor(
         .onEach {
             acceptIntent(SearchIntent.Loading(true))
         }
-        .flatMapLatest(searchUseCase)
-        .flatMapLatest {
-            mapResult(it)
+        .flatMapLatest{
+            performSearch(it)
         }
         .stateIn(
             viewModelScope,
@@ -78,6 +67,12 @@ internal class SearchViewModel @Inject constructor(
 
     init {
         acceptChanges(searchResult)
+    }
+
+    private suspend fun performSearch(query: String): Flow<SearchUiState.Partial> {
+        return searchUseCase(query).flatMapLatest { result ->
+            mapResult(result)
+        }
     }
 
 

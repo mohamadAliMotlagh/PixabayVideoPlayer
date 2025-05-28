@@ -32,8 +32,41 @@ A modern Android application for searching, playing, and bookmarking videos from
 - **Video Player**: ExoPlayer
 - **Build System**: Gradle with Kotlin DSL
 - **Language**: Kotlin
+- **Testing**: 
+  - **Unit Tests**: JUnit 5
+  - **Mocking**: Mockk
+  - **Flow Testing**: Turbine
+  - **UI Tests**: Compose Testing
 
-## 🏗 Project Structure
+## 🧪 Testing
+
+The project follows a comprehensive testing strategy:
+
+- **Unit Tests**: Using JUnit 5 for test structure and assertions
+- **Mocking**: Mockk for mocking dependencies and verifying interactions
+- **Flow Testing**: Turbine for testing Kotlin Flows and StateFlow
+- **Test Coverage**: High test coverage for ViewModels and UseCases
+
+Example test structure:
+```kotlin
+@Test
+fun `when search is successful, state is updated with results`() = runTest {
+    // Given
+    val query = "nature"
+    val videos = listOf(video1, video2)
+    coEvery { repository.searchVideos(query) } returns flowOf(videos)
+    
+    // When
+    viewModel.search(query)
+    
+    // Then
+    assertThat(viewModel.state.value).isEqualTo(
+        SearchState.Success(videos)
+    )
+}
+```
+
+## �� Project Structure
 
 The project follows a modular architecture with clear separation of concerns:
 
