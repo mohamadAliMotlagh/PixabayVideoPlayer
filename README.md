@@ -1,63 +1,18 @@
 # Pixabay Video Player
 
-A modern Android application for searching, playing, and bookmarking videos from Pixabay. Built with Jetpack Compose and following clean architecture principles.
+A modern Android application for searching, playing, and bookmarking videos from Pixabay. Built with **Jetpack Compose** and **MVI** architecture, featuring robust **state management**, **configuration change** support, and following **clean architecture** principles.
 
-## 🎥 Demo
+## 🎥 Recomposition Demo
 
 <img src="docs/assets/gif_2.gif" width="60%" alt="App Demo">
 
-*Optimized for Performance: Zero recompositions during navigation and state changes, ensuring smooth and efficient UI updates*
+*Zero recompositions achieved through optimized Compose implementation*
 
-## 🚀 Performance Optimizations
+## 📥 Download
 
-### Zero Recomposition Strategy
+[Download APK](https://drive.google.com/file/d/1yQOqWPiazq5wucqtAzTiMUZVpgSBybzi/view?usp=sharing)
 
-The app achieves zero recompositions through several key techniques:
-
-1. **State Hoisting**
-   - State is hoisted to the highest necessary level
-   - Child composables receive only the data they need
-   - Prevents unnecessary recompositions of child components
-
-2. **Remember & DerivedStateOf**
-   ```kotlin
-   // Example of optimized state handling
-   val derivedState = remember(key1, key2) {
-       derivedStateOf {
-           // Computed value that only updates when keys change
-       }
-   }
-   ```
-
-3. **Stable Interfaces**
-   - All data classes are marked with `@Immutable` or `@Stable`
-   - Prevents unnecessary recompositions when data hasn't changed
-   - Ensures Compose can properly track state changes
-
-4. **Key Usage in Lists**
-   ```kotlin
-   // Optimized list rendering
-   LazyColumn {
-       items(
-           items = items,
-           key = { it.id } // Stable key for efficient updates
-       ) { item ->
-           ItemComponent(item)
-       }
-   }
-   ```
-
-5. **LaunchedEffect for Side Effects**
-   - Side effects are properly scoped
-   - Prevents unnecessary recompositions from effect triggers
-   - Ensures effects only run when needed
-
-### Benefits
-
-- **Smooth Scrolling**: No jank during list scrolling
-- **Efficient Updates**: Only affected components recompose
-- **Better Battery Life**: Reduced CPU usage
-- **Improved Performance**: Faster UI updates and transitions
+*Version 1.0.0*
 
 ## 🎯 Features
 
@@ -65,7 +20,7 @@ The app achieves zero recompositions through several key techniques:
 - **Video Playback**: Watch videos with a custom player supporting both portrait and landscape modes
 - **Bookmarking**: Save your favorite videos for offline access
 - **Responsive UI**: Beautiful Material 3 design with smooth animations
-- **Offline Support**: Access bookmarked videos without internet connection
+- **Offline First**: Instant local results with async remote updates when online, seamless offline access when disconnected
 
 ## 🎯 Tech Stack
 
@@ -183,17 +138,11 @@ graph LR
   - **bookmark**: Bookmark management
   - **player**: Video playback
 
-## 🚀 Getting Started
+## 🔑 API Key
 
-### Prerequisites
-
-- Android Studio Hedgehog | 2023.1.1 or later
-- JDK 11
-- Android SDK 34 or later
-
-### Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/PixabayVideoPlayer.git
+To run the app, you need to:
+1. Get an API key from [Pixabay](https://pixabay.com/api/docs/)
+2. Add it to `local.properties`:
+```properties
+PIXABAY_API_KEY=your_api_key_here
 ```
