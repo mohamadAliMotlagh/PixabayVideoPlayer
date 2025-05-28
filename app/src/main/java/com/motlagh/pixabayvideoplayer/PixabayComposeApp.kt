@@ -1,9 +1,14 @@
 package com.motlagh.pixabayvideoplayer
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -18,6 +23,7 @@ import com.motlagh.feature.player.presenter.navigation.playerScreen
 import com.motlagh.feature.search.presenter.navigation.SearchRoute
 import com.motlagh.feature.search.presenter.navigation.searchScreen
 
+@OptIn(ExperimentalLayoutApi::class)
 @SuppressLint("ComposeModifierMissing")
 @Composable
 fun PixabayComposeApp() {
@@ -25,7 +31,7 @@ fun PixabayComposeApp() {
         Scaffold(
             modifier = Modifier
                 .fillMaxSize()
-                .statusBarsPadding()
+                .safeDrawingPadding()
         ) { innerPadding ->
             Surface(modifier = Modifier.padding(innerPadding)) {
                 AppNavigation()

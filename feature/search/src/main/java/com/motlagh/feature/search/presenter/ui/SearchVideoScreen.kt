@@ -114,7 +114,7 @@ fun Error(modifier: Modifier = Modifier) {
             .then(modifier)
     ) {
 
-        Text("An Error Happened")
+        Text("There is not any result :(",modifier = Modifier.align(Alignment.Center))
 
     }
 }
